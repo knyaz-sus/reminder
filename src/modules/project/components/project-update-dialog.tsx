@@ -58,7 +58,7 @@ export function ProjectUpdateDialog(project: Project) {
         </DropdownMenuPortal>
       </DropdownMenu>
       <DialogPortal>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent customClose className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Update project</DialogTitle>
             <DialogDescription>

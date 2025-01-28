@@ -1,18 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { v4 as uuid } from "uuid";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { createProjectRequestSchema } from "@/types/schemas";
-import { addProject } from "../api/add-project";
+import {
+  CreateProjectRequestSchema,
+  createProjectRequestSchema,
+} from "@/types/schemas";
+import { createProject } from "../api/create-project";
 import { projectQueryOptions } from "../api/project-query-options";
+import { MakeOptional } from "@/types";
 import { useRouter } from "next/navigation";
 
 export const useCreateProject = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
-  const newProjectId = uuid();
   const router = useRouter();
+
   const { mutateAsync, error } = useMutation({
-    mutationFn: addProject,
+    mutationFn: createProject,
 
     async onMutate(newProject) {
       await queryClient.cancelQueries({
@@ -31,7 +34,6 @@ export const useCreateProject = () => {
           return [
             {
               ...newProject,
-              id: newProjectId,
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
             },
@@ -54,17 +56,18 @@ export const useCreateProject = () => {
     },
   });
 
-  const handleCreate = async (name: string) => {
-    const newProject = {
-      id: newProjectId,
-      name,
+  const handleCreate = async (
+    createRequest: MakeOptional<CreateProjectRequestSchema, "adminId">
+  ) => {
+    const { success, data } = createProjectRequestSchema.safeParse({
+      ...createRequest,
       adminId: session?.user.id,
-    };
+    });
 
-    const { success, data } = createProjectRequestSchema.safeParse(newProject);
-
-    if (success) await mutateAsync(data);
-    if (newProjectId) router.push(`/app/projects/${newProjectId}`);
+    if (success) {
+      await mutateAsync(data);
+      router.push(`/app/projects/${createRequest.id}`);
+    }
   };
 
   return { handleCreate, error };

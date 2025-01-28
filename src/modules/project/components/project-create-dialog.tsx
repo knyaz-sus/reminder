@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { v4 as uuid } from "uuid";
 import { DialogFooter, DialogHeader } from "@/components/dialog";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
@@ -16,19 +17,20 @@ import {
 } from "@/components/dialog";
 
 export function ProjectCreateDialog() {
-  const [projectName, setProjectName] = useState("");
+  const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const { handleCreate } = useCreateProject();
-  const createProject = () => {
-    handleCreate(projectName);
+
+  const createProject = async () => {
     setOpen(false);
+    await handleCreate({ name, id: uuid() });
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="[&>svg]:size-4 [&>svg]:shrink-0  hover:text-sidebar-foreground">
         <Plus strokeWidth={3} />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent customClose className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add new project</DialogTitle>
           <DialogDescription>
@@ -42,8 +44,8 @@ export function ProjectCreateDialog() {
             </label>
             <Input
               id="link"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
         </div>
@@ -53,7 +55,7 @@ export function ProjectCreateDialog() {
               Close
             </Button>
           </DialogClose>
-          <Button onClick={createProject} size="sm" disabled={!projectName}>
+          <Button onClick={createProject} size="sm" disabled={!name}>
             Confirm
           </Button>
         </DialogFooter>

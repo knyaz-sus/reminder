@@ -6,7 +6,7 @@ import { unstable_cache } from "next/cache";
 
 export const taskQueryOptions = {
   baseKey: ["tasks"],
-  
+
   getProjectTasksQueryOptions(
     param: string,
     supabaseClient: SupabaseClient = supabase
@@ -29,6 +29,7 @@ export const taskQueryOptions = {
           });
         } catch (error) {
           console.log(error);
+          throw error;
         }
       }),
     });

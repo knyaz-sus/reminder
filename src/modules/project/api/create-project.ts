@@ -4,7 +4,7 @@ import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { CreateProjectRequestSchema, projectSchema } from "@/types/schemas";
 import { revalidatePath } from "next/cache";
 
-export const addProject = async (
+export const createProject = async (
   projectRequest: CreateProjectRequestSchema
 ) => {
   try {

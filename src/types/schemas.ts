@@ -42,7 +42,7 @@ export type UserRows = UserRow[];
 export type Tasks = Task[];
 
 export const createProjectRequestSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid(),
   name: z.string().nonempty(),
   adminId: z.string().uuid(),
 });

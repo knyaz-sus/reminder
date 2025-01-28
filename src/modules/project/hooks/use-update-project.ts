@@ -36,6 +36,14 @@ export const useUpdateProject = () => {
           })
       );
 
+      queryClient.setQueryData(
+        projectQueryOptions.getProjectQueryOptions(updatedProperties.id)
+          .queryKey,
+        (old) => {
+          if (old) return { ...old, ...updatedProperties };
+        }
+      );
+
       return previousData;
     },
 

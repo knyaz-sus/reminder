@@ -5,19 +5,22 @@ import { SidebarUserMenu } from "./sidebar-user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { QueryClient } from "@tanstack/react-query";
-import { projectQueryOptions } from "@/modules/project/api/project-query-options";
 import { redirect } from "next/navigation";
+import { serverProjectQueryOptions } from "@/modules/project/api/server-project-query-options";
 
 export async function AppSidebar() {
   const supabase = await createServerSupabase();
   const user = await supabase.auth.getUser();
-  if (!user) {
+  if (!user || !user.data.user) {
     redirect("/auth");
   }
 
   const queryClient = new QueryClient();
   const projects = await queryClient.fetchQuery(
-    projectQueryOptions.getAllProjectsQueryOptions(user.data.user?.id, supabase)
+    serverProjectQueryOptions.getAllProjectsQueryOptions(
+      user.data.user?.id,
+      supabase
+    )
   );
 
   return (
