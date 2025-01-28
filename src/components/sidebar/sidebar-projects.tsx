@@ -6,35 +6,25 @@ import {
   CollapsibleTrigger,
 } from "@/components/collapsible";
 import { ChevronDown } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { ProjectCreateDialog } from "@/modules/project/project-create-dialog";
+import { ProjectCreateDialog } from "@/modules/project/components/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
-import { projectApi } from "@/modules/project/project-api";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
+import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { Projects } from "@/types/schemas";
 
-export function SidebarProjects() {
-  const queryClient = useQueryClient();
-  const { session, isAuthLoading } = useAuth();
-  const {
-    data: projects,
-    isPending,
-    isError,
-  } = useQuery({
-    ...projectApi.getAllProjectsQueryOptions(session?.user.id, queryClient),
-    enabled: !!session?.user && !isAuthLoading,
-    select(data) {
-      return data.sort(
-        (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
-      );
-    },
+export function SidebarProjects({
+  projects,
+}: {
+  projects: Projects | undefined;
+}) {
+  const { session } = useAuth();
+  const { data } = useQuery({
+    ...projectQueryOptions.getAllProjectsQueryOptions(session?.user.id),
+    initialData: projects,
   });
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    <div>Can&apos;t get projects</div>;
-  }
+
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -57,12 +47,12 @@ export function SidebarProjects() {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="overflow-auto">
-            {projects?.length === 0 ? (
+            {!data || data?.length === 0 ? (
               <div className="text-center p-4">
                 You don&apos;t have any projects
               </div>
             ) : (
-              projects?.map((project) => (
+              data?.map((project) => (
                 <SidebarProject key={project.id} {...project} />
               ))
             )}

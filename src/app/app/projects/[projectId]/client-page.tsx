@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { projectApi } from "@/modules/project/project-api";
 import { useQueryProjectTasks } from "@/modules/task/hooks/use-query-project-tasks";
 import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
 import { useUpdateTaskOrder } from "@/modules/task/hooks/use-update-task-order";
@@ -15,19 +14,21 @@ import { CreateTask } from "@/modules/task/components/create-task";
 import { useCreateTask } from "@/modules/task/hooks/use-create-task";
 import { Task } from "@/modules/task/components/task";
 import { useParams } from "next/navigation";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import { projectQueryOptions } from "@/modules/project/api/project-query-options";
 
 export default function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
-
   const sensors = useTaskSensors();
-  const { handleUpdateOrder } = useUpdateTaskOrder(projectId);
 
-  const { data: project, isError: isProjectError } = useQuery({
-    ...projectApi.getProjectQueryOptions(projectId),
+  const { data: project } = useQuery({
+    ...projectQueryOptions.getProjectQueryOptions(projectId),
   });
 
-  const { tasks } = useQueryProjectTasks(projectId);
-  console.log(project, tasks);
+  const { tasks, setTasks } = useQueryProjectTasks(projectId);
+
+  const { handleUpdateOrder } = useUpdateTaskOrder(projectId);
+
   const { handleCreate } = useCreateTask(projectId);
 
   if (!tasks) return <div>Loading...</div>;
@@ -46,24 +47,17 @@ export default function ProjectPage() {
           return task;
         }
       );
-
-      // setTasks(updatedTasks);
+      setTasks(updatedTasks);
       handleUpdateOrder(updatedTasks);
     }
   };
-  if (isProjectError) {
-    return (
-      <div className="flex flex-col gap-2 items-center justify-center">
-        <span>Something went wrong</span>
-      </div>
-    );
-  }
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
       onDragEnd={handleDragEnd}
+      modifiers={[restrictToWindowEdges]}
     >
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">

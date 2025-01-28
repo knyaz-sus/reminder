@@ -1,21 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-// import { useEffect, useState } from "react";
-import { taskApi } from "../task-api";
+import { useEffect, useState } from "react";
+import { taskQueryOptions } from "../api/task-query-options";
 
 export const useQueryProjectTasks = (projectId: string) => {
-  const { data: tasks, error } = useQuery({
-    ...taskApi.getProjectTasksQueryOptions(projectId),
-    select(data) {
-      return data?.sort((a, b) => {
-        const aOrder = a.order as number;
-        const bOrder = b.order as number;
-        return aOrder - bOrder;
-      });
-    },
+  const { data, error } = useQuery({
+    ...taskQueryOptions.getProjectTasksQueryOptions(projectId),
   });
 
-  // const [tasks, setTasks] = useState(data);
-  // useEffect(() => setTasks(data), [data]);
+  const [tasks, setTasks] = useState(data);
+  useEffect(() => setTasks(data), [data]);
 
-  return { tasks, error };
+  return { tasks, setTasks, error };
 };

@@ -22,16 +22,15 @@ import {
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { Ellipsis, PencilLine, Trash2 } from "lucide-react";
-import { useDeleteProject } from "./hooks/use-delete-project";
+import { useDeleteProject } from "../hooks/use-delete-project";
 import { Project } from "@/types/schemas";
-import { useUpdateProject } from "./hooks/use-update-project";
+import { useUpdateProject } from "../hooks/use-update-project";
 
 export function ProjectUpdateDialog(project: Project) {
   const [updateName, setUpdateName] = useState(project.name);
   const { handleDelete } = useDeleteProject();
   const { handleUpdate } = useUpdateProject();
   const deleteProject = () => {
-    window.history.replaceState(null, "", "/app/today");
     handleDelete({ id: project.id, adminId: project.adminId });
   };
   const updateProject = () => {

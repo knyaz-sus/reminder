@@ -1,28 +1,32 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { projectApi } from "../project-api";
 import { v4 as uuid } from "uuid";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { createProjectRequestSchema } from "@/types/schemas";
+import { addProject } from "../api/add-project";
+import { projectQueryOptions } from "../api/project-query-options";
 import { useRouter } from "next/navigation";
 
 export const useCreateProject = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
-  const router = useRouter();
   const newProjectId = uuid();
-
+  const router = useRouter();
   const { mutateAsync, error } = useMutation({
-    mutationFn: projectApi.addProject,
+    mutationFn: addProject,
 
     async onMutate(newProject) {
-      await queryClient.cancelQueries({ queryKey: projectApi.baseKey });
+      await queryClient.cancelQueries({
+        queryKey: projectQueryOptions.baseKey,
+      });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey,
         (old = []) => {
           return [
             {
@@ -40,12 +44,13 @@ export const useCreateProject = () => {
     },
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey,
         previousData
       );
     },
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
+      queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
     },
   });
 

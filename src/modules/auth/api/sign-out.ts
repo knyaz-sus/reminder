@@ -12,5 +12,6 @@ export const signOut = async () => {
   if (error) return { error, message: error.message };
 
   revalidatePath("/", "layout");
+
   redirect("/");
 };

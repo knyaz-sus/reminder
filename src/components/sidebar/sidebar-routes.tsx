@@ -13,7 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export function SidebarRoutes() {
-  const pathName = usePathname();
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -28,8 +28,8 @@ export function SidebarRoutes() {
             const { path, name, Icon } = route;
             return (
               <SidebarMenuItem key={path + index}>
-                <SidebarMenuButton asChild isActive={pathName === path}>
-                  <Link href={path}>
+                <SidebarMenuButton asChild isActive={pathname === path}>
+                  <Link href={path} prefetch>
                     <Icon />
                     <span>{name}</span>
                   </Link>

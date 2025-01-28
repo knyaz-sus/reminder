@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { taskApi } from "../task-api";
+import { taskQueryOptions } from "../api/task-query-options";
 
 export const useQueryPageTasks = (page: "inbox" | "today") => {
   const {
@@ -7,7 +7,7 @@ export const useQueryPageTasks = (page: "inbox" | "today") => {
     isPending,
     error,
   } = useQuery({
-    ...taskApi.getProjectTasksQueryOptions(page),
+    ...taskQueryOptions.getProjectTasksQueryOptions(page),
     select(data) {
       return data?.sort(
         (a, b) => Number(new Date(a.createdAt)) - Number(new Date(b.createdAt))

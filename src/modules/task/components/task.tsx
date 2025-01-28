@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { StaticEditor } from "@/components/editor/static-editor";
 import { Separator } from "@/components/separator";
 import { Calendar } from "lucide-react";
-import { useState } from "react";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
 import { useUpdateTask } from "../hooks/use-update-task";
@@ -16,15 +16,22 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
   const { handleDone } = useUpdateTask(props.param);
   const toggleDone = () => handleDone(props.id, !props.isDone);
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: props.id,
-      disabled: !props.isSortable,
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: props.id,
+    disabled: !props.isSortable,
+  });
 
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
+    zIndex: isDragging ? 1000 : 0,
   };
   return (
     <div
@@ -33,6 +40,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
       ref={setNodeRef}
       style={style}
       className="flex flex-col gap-2 mb-2 bg-background touch-none"
+      aria-describedby=""
     >
       <div className="flex cursor-pointer group flex-col">
         <div className="flex items-start w-full py-1 gap-2">

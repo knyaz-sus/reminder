@@ -5,7 +5,7 @@ import { DialogFooter, DialogHeader } from "@/components/dialog";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { Plus } from "lucide-react";
-import { useCreateProject } from "./hooks/use-create-project";
+import { useCreateProject } from "../hooks/use-create-project";
 import {
   Dialog,
   DialogContent,
@@ -54,7 +54,7 @@ export function ProjectCreateDialog() {
             </Button>
           </DialogClose>
           <Button onClick={createProject} size="sm" disabled={!projectName}>
-           Confirm
+            Confirm
           </Button>
         </DialogFooter>
       </DialogContent>

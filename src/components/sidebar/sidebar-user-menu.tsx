@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { LogOut, Settings } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import {
@@ -14,10 +14,10 @@ import {
 import { signOut } from "@/modules/auth/api/sign-out";
 
 export function SidebarUserMenu() {
-  const { session, isAuthLoading } = useAuth();
+  const queryClient = useQueryClient();
+  const { session } = useAuth();
   const { data: user } = useQuery({
     ...userApi.getUserQueryOptions(session?.user.id),
-    enabled: !!session?.user && !isAuthLoading,
   });
   return (
     <SidebarHeader>
@@ -39,7 +39,12 @@ export function SidebarUserMenu() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton size="sm">
-              <LogOut onClick={signOut} />
+              <LogOut
+                onClick={() => {
+                  queryClient.clear();
+                  signOut();
+                }}
+              />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </div>

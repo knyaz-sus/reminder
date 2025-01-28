@@ -24,6 +24,9 @@ export const addTask = async (newTask: CreateTaskRequestSchema) => {
 
     return validatedData;
   } catch (error) {
-    if (error instanceof Error) return { error, message: error.message };
+    if (error instanceof Error) {
+      error.cause = { nextNoDigest: true, originalCause: error.cause };
+      throw error;
+    }
   }
 };

@@ -1,27 +1,32 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { projectApi } from "../project-api";
 import {
   updateProjectRequestSchema,
   UpdateProjectRequestSchema,
 } from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
+import { projectQueryOptions } from "../api/project-query-options";
+import { updateProject } from "../api/update-project";
 
 export const useUpdateProject = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
 
   const { mutate, error } = useMutation({
-    mutationFn: projectApi.updateProject,
+    mutationFn: updateProject,
 
     async onMutate(updatedProperties) {
-      await queryClient.cancelQueries({ queryKey: projectApi.baseKey });
+      await queryClient.cancelQueries({
+        queryKey: projectQueryOptions.baseKey,
+      });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey,
         (old = []) =>
           old.map((el) => {
             if (el.id === updatedProperties.id) {
@@ -36,13 +41,14 @@ export const useUpdateProject = () => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
+          .queryKey,
         previousData
       );
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
+      queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
     },
   });
 
