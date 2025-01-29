@@ -4,9 +4,14 @@ import { SidebarTrigger } from "@/components/sidebar/sidebar";
 import { ViewOptions } from "./view-options";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { cn } from "@/lib/cn";
+import { useEffect } from "react";
+import { supabase } from "@/lib/supabase/create-browser-supabase";
 
 export function AppHeader() {
   const { isOpen, isMobile } = useSidebar();
+  useEffect(() => {
+    supabase.auth.refreshSession();
+  }, []);
   return (
     <header className="flex fixed w-full justify-between h-[52px] z-[2] bg-background">
       <SidebarTrigger
