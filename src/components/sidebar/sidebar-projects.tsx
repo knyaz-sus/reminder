@@ -37,13 +37,12 @@ export function SidebarProjects({
           >
             <div className="flex-auto">My projects</div>
             <ProjectCreateDialog />
-            <CollapsibleTrigger className="[&>svg]:size-4 [&>svg]:shrink-0 p-1">
-              <ChevronDown
-                strokeWidth={3}
-                className="ml-auto transition-transform 
+            <CollapsibleTrigger
+              className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 ml-auto transition-transform 
             group-data-[state=open]/collapsible:rotate-180
             hover:text-sidebar-foreground"
-              />
+            >
+              <ChevronDown strokeWidth={3} />
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="overflow-auto">
