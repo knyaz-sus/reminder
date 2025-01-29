@@ -45,5 +45,3 @@ export default async function Project({
     </HydrationBoundary>
   );
 }
-
-// handle fetch errors in RSC
