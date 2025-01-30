@@ -30,19 +30,32 @@ export function SidebarProjects({
       <SidebarGroupContent>
         <Collapsible defaultOpen className="group/collapsible">
           <div
-            className="flex justify-between items-center gap-2
-          w-full rounded-md pl-2 py-1 overflow-hidden outline-none 
-          text-sidebar-foreground/80 text-left text-sm font-semibold
-          hover:bg-sidebar-accent"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "0.5rem",
+              width: "100%",
+              borderRadius: "0.375rem",
+              paddingLeft: "0.5rem",
+              paddingTop: "0.25rem",
+              paddingBottom: "0.25rem",
+              overflow: "hidden",
+              outline: "none",
+              color: "rgba(var(--color-sidebar-foreground), 0.8)",
+              textAlign: "left",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              transition: "background-color 0.2s",
+            }}
           >
             <div className="flex-auto">My projects</div>
             <ProjectCreateDialog />
-            <CollapsibleTrigger
-              className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 ml-auto transition-transform 
-            group-data-[state=open]/collapsible:rotate-180
-            hover:text-sidebar-foreground"
-            >
-              <ChevronDown strokeWidth={3} />
+            <CollapsibleTrigger className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 ml-auto">
+              <ChevronDown
+                className="w-4 h-4 shrink-0 transition-transform"
+                strokeWidth={3}
+              />
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="overflow-auto">
