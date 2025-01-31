@@ -14,7 +14,7 @@ export const useCreateProject = () => {
   const { session } = useAuth();
   const router = useRouter();
 
-  const { mutateAsync, error } = useMutation({
+  const { mutate, error } = useMutation({
     mutationFn: createProject,
 
     async onMutate(newProject) {
@@ -51,8 +51,9 @@ export const useCreateProject = () => {
         previousData
       );
     },
-    onSettled() {
+    onSettled(data) {
       queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
+      if (data) router.push(`/app/projects/${data.id}`);
     },
   });
 
@@ -64,10 +65,7 @@ export const useCreateProject = () => {
       adminId: session?.user.id,
     });
 
-    if (success) {
-      await mutateAsync(data);
-      router.push(`/app/projects/${createRequest.id}`);
-    }
+    if (success) mutate(data);
   };
 
   return { handleCreate, error };

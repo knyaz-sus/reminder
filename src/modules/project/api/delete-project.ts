@@ -18,11 +18,11 @@ export const deleteProject = async ({
     const user = await supabase.auth.getUser();
     if (!user) redirect("/auth/login");
 
-    revalidatePath("/", "layout");
-
     if (user.data.user?.id === validatedAdminId) {
       await supabase.from("projects").delete().eq("id", validatedProjectId);
     }
+
+    revalidatePath("/", "layout");
   } catch (error) {
     if (error instanceof Error) {
       error.cause = { nextNoDigest: true, originalCause: error.cause };

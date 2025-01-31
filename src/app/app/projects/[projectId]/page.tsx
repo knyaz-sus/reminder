@@ -6,7 +6,7 @@ import {
 import ProjectPage from "./client-page";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { taskQueryOptions } from "@/modules/task/api/task-query-options";
-import { serverProjectQueryOptions } from "@/modules/project/api/server-project-query-options";
+import { projectQueryOptions } from "@/modules/project/api/project-query-options";
 
 export default async function Project({
   params,
@@ -23,7 +23,7 @@ export default async function Project({
       taskQueryOptions.getProjectTasksQueryOptions(projectId, supabase)
     ),
     queryClient.fetchQuery(
-      serverProjectQueryOptions.getProjectQueryOptions(projectId, supabase)
+      projectQueryOptions.getProjectQueryOptions(projectId, supabase)
     ),
   ]);
 

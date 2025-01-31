@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 export const updateProject = async (project: UpdateProjectRequestSchema) => {
   try {
     const supabase = await createServerSupabase();
+    project.id = "";
     const { data } = await supabase
       .from("projects")
       .update(project)
@@ -15,9 +16,12 @@ export const updateProject = async (project: UpdateProjectRequestSchema) => {
       .throwOnError();
 
     revalidatePath("/", "layout");
-
     return projectSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) return { error, message: error.message };
+    revalidatePath("/", "layout");
+    if (error instanceof Error) {
+      error.cause = { nextNoDigest: true, originalCause: error.cause };
+      throw error;
+    }
   }
 };

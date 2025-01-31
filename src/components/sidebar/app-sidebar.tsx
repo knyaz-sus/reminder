@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { QueryClient } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
-import { serverProjectQueryOptions } from "@/modules/project/api/server-project-query-options";
+import { projectQueryOptions } from "@/modules/project/api/project-query-options";
 
 export async function AppSidebar() {
   const supabase = await createServerSupabase();
@@ -17,7 +17,7 @@ export async function AppSidebar() {
 
   const queryClient = new QueryClient();
   const projects = await queryClient.fetchQuery(
-    serverProjectQueryOptions.getAllProjectsQueryOptions(
+    projectQueryOptions.getAllProjectsQueryOptions(
       session.data.session?.user.id,
       supabase
     )
