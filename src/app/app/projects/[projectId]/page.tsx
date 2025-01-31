@@ -1,12 +1,9 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import ProjectPage from "./client-page";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { taskQueryOptions } from "@/modules/task/api/task-query-options";
+import { taskApi } from "@/modules/task/api/task-api";
 import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { makeQueryClient } from "@/lib/get-query-client";
 
 export default async function Project({
   params,
@@ -16,11 +13,11 @@ export default async function Project({
   const supabase = await createServerSupabase();
 
   const { projectId } = await params;
-  const queryClient = new QueryClient();
+  const queryClient = makeQueryClient();
 
   const queries = await Promise.allSettled([
     queryClient.fetchQuery(
-      taskQueryOptions.getProjectTasksQueryOptions(projectId, supabase)
+      taskApi.getProjectTasksQueryOptions(projectId, supabase)
     ),
     queryClient.fetchQuery(
       projectQueryOptions.getProjectQueryOptions(projectId, supabase)

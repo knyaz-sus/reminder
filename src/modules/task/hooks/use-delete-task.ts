@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTask } from "../api/delete-task";
-import { taskQueryOptions } from "../api/task-query-options";
+import { deleteTask } from "../api/actions/delete-task";
+import { taskApi } from "../api/task-api";
 
 export const useDeleteTask = (projectId: string) => {
   const queryClient = useQueryClient();
@@ -8,14 +8,14 @@ export const useDeleteTask = (projectId: string) => {
     mutationFn: deleteTask,
 
     async onMutate(id) {
-      await queryClient.cancelQueries({ queryKey: taskQueryOptions.baseKey });
+      await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey
       );
 
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         (old = []) => old.filter((el) => el.id !== id)
       );
 
@@ -24,13 +24,13 @@ export const useDeleteTask = (projectId: string) => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         previousData
       );
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: taskQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: taskApi.baseKey });
     },
   });
 

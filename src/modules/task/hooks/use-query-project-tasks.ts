@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { taskQueryOptions } from "../api/task-query-options";
+import { taskApi } from "../api/task-api";
 
 export const useQueryProjectTasks = (projectId: string) => {
   const { data, error } = useQuery({
-    ...taskQueryOptions.getProjectTasksQueryOptions(projectId),
+    ...taskApi.getProjectTasksQueryOptions(projectId),
   });
 
   const [tasks, setTasks] = useState(data);

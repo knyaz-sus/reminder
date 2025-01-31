@@ -11,13 +11,10 @@ export const deleteTask = async (id: string) => {
     const supabase = await createServerSupabase();
     await supabase.from("tasks").delete().eq("id", validatedId).throwOnError();
 
-    revalidatePath("/", "layout");
-
     return { message: "Task deleted succesfully" };
   } catch (error) {
-    if (error instanceof Error) {
-      error.cause = { nextNoDigest: true, originalCause: error.cause };
-      throw error;
-    }
+    if (error instanceof Error) return error;
+  } finally {
+    revalidatePath("/", "layout");
   }
 };

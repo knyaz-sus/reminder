@@ -22,13 +22,10 @@ export const updateTask = async (
       .select("*")
       .throwOnError();
 
-    revalidatePath("/", "layout");
-
     return tasksSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      error.cause = { nextNoDigest: true, originalCause: error.cause };
-      throw error;
-    }
+    if (error instanceof Error) return error;
+  } finally {
+    revalidatePath("/", "layout");
   }
 };

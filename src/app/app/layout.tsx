@@ -6,17 +6,14 @@ import { cookies } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { redirect } from "next/navigation";
 import { userApi } from "@/api/user-api";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { makeQueryClient } from "@/lib/get-query-client";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
 
-  const queryClient = new QueryClient();
+  const queryClient = makeQueryClient();
   const supabase = await createServerSupabase();
 
   const session = await supabase.auth.getSession();

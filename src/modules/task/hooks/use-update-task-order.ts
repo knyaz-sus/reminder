@@ -1,23 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tasks, tasksSchema } from "@/types/schemas";
-import { updateTaskOrder } from "../api/update-task-order";
-import { taskQueryOptions } from "../api/task-query-options";
+import { taskApi } from "../api/task-api";
 
 export const useUpdateTaskOrder = (queryKey: string) => {
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
-    mutationFn: updateTaskOrder,
+    mutationFn: taskApi.updateTaskOrder,
 
     async onMutate(tasks) {
-      await queryClient.cancelQueries({ queryKey: taskQueryOptions.baseKey });
+      await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey
       );
 
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey,
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         () => tasks
       );
 
@@ -26,13 +25,13 @@ export const useUpdateTaskOrder = (queryKey: string) => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey,
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         previousData
       );
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: taskQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: taskApi.baseKey });
     },
   });
 

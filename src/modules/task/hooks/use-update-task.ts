@@ -3,24 +3,23 @@ import {
   UpdateTaskRequestSchema,
   updateTaskRequestSchema,
 } from "@/types/schemas";
-import { taskQueryOptions } from "../api/task-query-options";
-import { updateTask } from "../api/update-task";
+import { taskApi } from "../api/task-api";
 
 export const useUpdateTask = (queryKey: string) => {
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
-    mutationFn: updateTask,
+    mutationFn: taskApi.updateTask,
 
     async onMutate(updatedProperties) {
-      await queryClient.cancelQueries({ queryKey: taskQueryOptions.baseKey });
+      await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey
       );
 
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey,
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         (old = []) =>
           old.map((el) => {
             if (el.id === updatedProperties.id) {
@@ -35,13 +34,13 @@ export const useUpdateTask = (queryKey: string) => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(queryKey).queryKey,
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         previousData
       );
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: taskQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: taskApi.baseKey });
     },
   });
 

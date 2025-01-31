@@ -5,26 +5,25 @@ import {
   createTaskRequestSchema,
 } from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { addTask } from "../api/add-task";
-import { taskQueryOptions } from "../api/task-query-options";
+import { taskApi } from "../api/task-api";
 
 export const useCreateTask = (projectId: string) => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
   const { mutate, error } = useMutation({
-    mutationFn: addTask,
+    mutationFn: taskApi.createTask,
 
     async onMutate(newTask) {
-      await queryClient.cancelQueries({ queryKey: taskQueryOptions.baseKey });
+      await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       if (!session) return;
 
       const previousData = queryClient.getQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey
       );
 
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         (old = []) => [
           ...old,
           {
@@ -44,15 +43,14 @@ export const useCreateTask = (projectId: string) => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey,
+        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         previousData
       );
     },
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey:
-          taskQueryOptions.getProjectTasksQueryOptions(projectId).queryKey,
+        queryKey: taskApi.getProjectTasksQueryOptions(projectId).queryKey,
       });
     },
   });

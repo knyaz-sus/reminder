@@ -4,9 +4,9 @@ import { SidebarRoutes } from "./sidebar-routes";
 import { SidebarUserMenu } from "./sidebar-user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { QueryClient } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
 import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { makeQueryClient } from "@/lib/get-query-client";
 
 export async function AppSidebar() {
   const supabase = await createServerSupabase();
@@ -15,7 +15,7 @@ export async function AppSidebar() {
     redirect("/auth");
   }
 
-  const queryClient = new QueryClient();
+  const queryClient = makeQueryClient();
   const projects = await queryClient.fetchQuery(
     projectQueryOptions.getAllProjectsQueryOptions(
       session.data.session?.user.id,

@@ -1,21 +1,38 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode, useState } from "react";
+import {
+  QueryClient,
+  QueryClientProvider,
+  isServer,
+} from "@tanstack/react-query";
+import { ReactNode } from "react";
 import { UserProvider } from "@/context/user-provider";
 import { ThemeProvider } from "./theme-provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+}
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+export function getQueryClient() {
+  if (isServer) {
+    return makeQueryClient();
+  } else {
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
+}
+
 export function Provider({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 60 * 1000,
-          },
-        },
-      })
-  );
+  const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>

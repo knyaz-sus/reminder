@@ -5,7 +5,7 @@ import { CreateTaskRequestSchema, tasksSchema } from "@/types/schemas";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const addTask = async (newTask: CreateTaskRequestSchema) => {
+export const createTask = async (newTask: CreateTaskRequestSchema) => {
   try {
     const supabase = await createServerSupabase();
     const user = await supabase.auth.getUser();
@@ -18,15 +18,10 @@ export const addTask = async (newTask: CreateTaskRequestSchema) => {
       .select("*")
       .throwOnError();
 
-    const validatedData = tasksSchema.parse(data);
-
-    revalidatePath("/", "layout");
-
-    return validatedData;
+    return tasksSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      error.cause = { nextNoDigest: true, originalCause: error.cause };
-      throw error;
-    }
+    if (error instanceof Error) return error;
+  } finally {
+    revalidatePath("/", "layout");
   }
 };
