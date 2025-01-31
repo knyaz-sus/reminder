@@ -10,15 +10,15 @@ import { serverProjectQueryOptions } from "@/modules/project/api/server-project-
 
 export async function AppSidebar() {
   const supabase = await createServerSupabase();
-  const user = await supabase.auth.getUser();
-  if (!user || !user.data.user) {
+  const session = await supabase.auth.getSession();
+  if (!session) {
     redirect("/auth");
   }
 
   const queryClient = new QueryClient();
   const projects = await queryClient.fetchQuery(
     serverProjectQueryOptions.getAllProjectsQueryOptions(
-      user.data.user?.id,
+      session.data.session?.user.id,
       supabase
     )
   );

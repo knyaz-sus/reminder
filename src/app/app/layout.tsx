@@ -19,12 +19,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient();
   const supabase = await createServerSupabase();
 
-  const user = await supabase.auth.getUser();
-  if (!user) redirect("/auth");
+  const session = await supabase.auth.getSession();
+  if (!session) redirect("/auth");
 
   await Promise.allSettled([
     queryClient.prefetchQuery(
-      userApi.getUserQueryOptions(user.data.user?.id, supabase)
+      userApi.getUserQueryOptions(session.data.session?.user.id, supabase)
     ),
   ]);
 
