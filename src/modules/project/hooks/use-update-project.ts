@@ -1,8 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  updateProjectRequestSchema,
-  UpdateProjectRequestSchema,
-} from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { projectApi } from "../api/project-api";
 import { useToast } from "@/hooks/use-toast";
@@ -61,11 +57,5 @@ export const useUpdateProject = () => {
     },
   });
 
-  const handleUpdate = (updateProperties: UpdateProjectRequestSchema) => {
-    const { data, success } =
-      updateProjectRequestSchema.safeParse(updateProperties);
-    if (success) mutate(data);
-  };
-
-  return { handleUpdate, error };
+  return { mutate, error };
 };

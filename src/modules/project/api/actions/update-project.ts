@@ -1,16 +1,29 @@
 "use server";
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { projectSchema, UpdateProjectRequestSchema } from "@/types/schemas";
+import {
+  projectSchema,
+  UpdateProjectRequest,
+  updateProjectRequestSchema,
+} from "@/schemas/project-schema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export const updateProject = async (project: UpdateProjectRequestSchema) => {
+export const updateProject = async (updateRequest: UpdateProjectRequest) => {
   try {
+    const validatedRequest = updateProjectRequestSchema.parse(updateRequest);
+
     const supabase = await createServerSupabase();
+
+    const user = await supabase.auth.getUser();
+    if (!user) {
+      redirect("/auth/login");
+    }
+
     const { data } = await supabase
       .from("projects")
-      .update(project)
-      .eq("id", project.id)
+      .update(validatedRequest)
+      .eq("id", validatedRequest.id)
       .select("*")
       .single()
       .throwOnError();

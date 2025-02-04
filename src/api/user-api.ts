@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase/create-browser-supabase";
-import { userRowSchema } from "@/types/schemas";
-import { validateUUID } from "@/utils/validate-uuid";
+import { userSchema } from "@/schemas/user-schema";
+import { validateUUID } from "@/schemas/utils/validate-uuid";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
 import { unstable_cache } from "next/cache";
@@ -22,7 +22,7 @@ export const userApi = {
           .single()
           .throwOnError();
 
-        return userRowSchema.parse(data);
+        return userSchema.parse(data);
       }),
     });
   },

@@ -1,9 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Priorities } from "@/constants/ui";
-import {
-  CreateTaskRequestSchema,
-  createTaskRequestSchema,
-} from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { taskApi } from "../api/task-api";
 import { useToast } from "@/hooks/use-toast";
@@ -62,10 +58,5 @@ export const useCreateTask = (projectId: string) => {
     },
   });
 
-  const handleCreate = (newTask: CreateTaskRequestSchema) => {
-    const { success, data } = createTaskRequestSchema.safeParse(newTask);
-    if (success) mutate(data);
-  };
-
-  return { handleCreate, error };
+  return { mutate, error };
 };

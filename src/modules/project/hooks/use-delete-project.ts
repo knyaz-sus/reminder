@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import {
-  DeleteProjectRequestSchema,
-  deleteProjectRequestSchema,
-} from "@/types/schemas";
+import { DeleteProjectRequest } from "@/schemas/project-schema";
 import { projectApi } from "../api/project-api";
 import { usePathname } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -48,13 +45,11 @@ export const useDeleteProject = () => {
     },
   });
 
-  const handleDelete = (deleteRequest: DeleteProjectRequestSchema) => {
+  const handleDelete = (deleteRequest: DeleteProjectRequest) => {
     if (pathname.includes(deleteRequest.id)) {
       window.history.replaceState(null, "", "/app/today");
     }
-    const { success, data } =
-      deleteProjectRequestSchema.safeParse(deleteRequest);
-    if (success) mutate(data);
+    mutate(deleteRequest);
   };
 
   return { handleDelete, error };

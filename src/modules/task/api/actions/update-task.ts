@@ -4,17 +4,22 @@ import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import {
   tasksSchema,
   updateTaskRequestSchema,
-  UpdateTaskRequestSchema,
-} from "@/types/schemas";
+  UpdateTaskRequest,
+} from "@/schemas/task-schema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export const updateTask = async (
-  updatedProperties: UpdateTaskRequestSchema
-) => {
+export const updateTask = async (updatedProperties: UpdateTaskRequest) => {
   try {
     const validatedData = updateTaskRequestSchema.parse(updatedProperties);
 
     const supabase = await createServerSupabase();
+
+    const user = await supabase.auth.getUser();
+    if (!user) {
+      redirect("/auth/login");
+    }
+
     const { data } = await supabase
       .from("tasks")
       .update(validatedData)

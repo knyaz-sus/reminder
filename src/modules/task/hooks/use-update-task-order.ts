@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Tasks, tasksSchema } from "@/types/schemas";
 import { taskApi } from "../api/task-api";
 import { useToast } from "@/hooks/use-toast";
 
@@ -41,10 +40,5 @@ export const useUpdateTaskOrder = (queryKey: string) => {
     },
   });
 
-  const handleUpdateOrder = (tasks: Tasks) => {
-    const { data: validatedTasks, success } = tasksSchema.safeParse(tasks);
-    if (success) mutate(validatedTasks);
-  };
-
-  return { handleUpdateOrder, error };
+  return { mutate, error };
 };

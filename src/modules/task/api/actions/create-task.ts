@@ -1,20 +1,27 @@
 "use server";
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { CreateTaskRequestSchema, tasksSchema } from "@/types/schemas";
+import {
+  CreateTaskRequest,
+  createTaskRequestSchema,
+  tasksSchema,
+} from "@/schemas/task-schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const createTask = async (newTask: CreateTaskRequestSchema) => {
+export const createTask = async (createRequest: CreateTaskRequest) => {
   try {
+    const validatedRequest = createTaskRequestSchema.parse(createRequest);
+
     const supabase = await createServerSupabase();
     const user = await supabase.auth.getUser();
     if (!user) {
       redirect("/auth");
     }
+
     const { data } = await supabase
       .from("tasks")
-      .insert({ ...newTask, adminId: user.data.user?.id })
+      .insert({ ...validatedRequest, adminId: user.data.user?.id })
       .select("*")
       .throwOnError();
 

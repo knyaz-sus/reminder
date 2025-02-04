@@ -9,13 +9,13 @@ import { PrioritySelect } from "./priority-select";
 import { Priorities } from "@/constants/ui";
 import { Plus } from "lucide-react";
 import { useCreateState } from "../hooks/use-create-state";
-import { CreateTaskRequestSchema } from "@/types/schemas";
+import { CreateTaskRequest } from "@/schemas/task-schema";
 import { v4 as uuid } from "uuid";
 
 interface CreateTaskProps {
   projectId: string | null;
   order: number | null;
-  createTask: (newTask: CreateTaskRequestSchema) => void;
+  createTask: (newTask: CreateTaskRequest) => void;
   defaultDate?: Date;
 }
 

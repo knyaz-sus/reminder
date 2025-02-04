@@ -1,8 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  UpdateTaskRequestSchema,
-  updateTaskRequestSchema,
-} from "@/types/schemas";
+import { UpdateTaskRequest } from "@/schemas/task-schema";
 import { taskApi } from "../api/task-api";
 import { useToast } from "@/hooks/use-toast";
 
@@ -50,10 +47,8 @@ export const useUpdateTask = (queryKey: string) => {
     },
   });
 
-  const handleUpdate = (updateProperties: UpdateTaskRequestSchema) => {
-    const { data, success } =
-      updateTaskRequestSchema.safeParse(updateProperties);
-    if (success) mutate(data);
+  const handleUpdate = (updateProperties: UpdateTaskRequest) => {
+    mutate(updateProperties);
   };
 
   const handleDone = (id: string, isDone: boolean) => mutate({ id, isDone });

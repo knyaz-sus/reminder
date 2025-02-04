@@ -1,15 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
-import { validateUUID } from "@/utils/validate-uuid";
+import { validateUUID } from "@/schemas/utils/validate-uuid";
 import { unstable_cache } from "next/cache";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/create-browser-supabase";
 import {
-  CreateProjectRequestSchema,
-  DeleteProjectRequestSchema,
+  CreateProjectRequest,
+  DeleteProjectRequest,
   projectSchema,
   projectsSchema,
-  UpdateProjectRequestSchema,
-} from "@/types/schemas";
+  UpdateProjectRequest,
+} from "@/schemas/project-schema";
 import { createProject } from "./actions/create-project";
 import { deleteProject } from "./actions/delete-project";
 import { updateProject } from "./actions/update-project";
@@ -69,17 +69,17 @@ export const projectApi = {
       queryKey: ["projects", userId],
     });
   },
-  async createProject(projectRequest: CreateProjectRequestSchema) {
+  async createProject(projectRequest: CreateProjectRequest) {
     const res = await createProject(projectRequest);
     if (res instanceof Error) throw res;
     else return res;
   },
-  async deleteProject(deleteRequest: DeleteProjectRequestSchema) {
+  async deleteProject(deleteRequest: DeleteProjectRequest) {
     const res = await deleteProject(deleteRequest);
     if (res instanceof Error) throw res;
     else return res;
   },
-  async updateProject(updateRequest: UpdateProjectRequestSchema) {
+  async updateProject(updateRequest: UpdateProjectRequest) {
     const res = await updateProject(updateRequest);
     if (res instanceof Error) throw res;
     else return res;

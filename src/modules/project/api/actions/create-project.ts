@@ -1,14 +1,25 @@
 "use server";
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { CreateProjectRequestSchema, projectSchema } from "@/types/schemas";
+import {
+  CreateProjectRequest,
+  createProjectRequestSchema,
+  projectSchema,
+} from "@/schemas/project-schema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export const createProject = async (
-  projectRequest: CreateProjectRequestSchema
-) => {
+export const createProject = async (projectRequest: CreateProjectRequest) => {
   try {
+    createProjectRequestSchema.parse(projectRequest);
+
     const supabase = await createServerSupabase();
+
+    const user = await supabase.auth.getUser();
+    if (!user) {
+      redirect("/auth/login");
+    }
+
     const { data } = await supabase
       .from("projects")
       .insert(projectRequest)

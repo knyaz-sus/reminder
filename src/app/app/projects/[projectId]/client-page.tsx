@@ -27,9 +27,9 @@ export default function ProjectPage() {
 
   const { tasks, setTasks } = useQueryProjectTasks(projectId);
 
-  const { handleUpdateOrder } = useUpdateTaskOrder(projectId);
+  const { mutate: handleUpdateOrder } = useUpdateTaskOrder(projectId);
 
-  const { handleCreate } = useCreateTask(projectId);
+  const { mutate: handleCreate } = useCreateTask(projectId);
 
   if (!tasks) return <div>Loading...</div>;
 

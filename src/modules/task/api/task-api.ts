@@ -1,10 +1,10 @@
 import { supabase } from "@/lib/supabase/create-browser-supabase";
 import {
-  CreateTaskRequestSchema,
+  CreateTaskRequest,
   Tasks,
   tasksSchema,
-  UpdateTaskRequestSchema,
-} from "@/types/schemas";
+  UpdateTaskRequest,
+} from "@/schemas/task-schema";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
 import { unstable_cache } from "next/cache";
@@ -48,7 +48,7 @@ export const taskApi = {
     if (res instanceof Error) throw res;
     else return res;
   },
-  async updateTask(updatedProperties: UpdateTaskRequestSchema) {
+  async updateTask(updatedProperties: UpdateTaskRequest) {
     const res = await updateTask(updatedProperties);
     if (res instanceof Error) throw res;
     else return res;
@@ -58,7 +58,7 @@ export const taskApi = {
     if (res instanceof Error) throw res;
     else return res;
   },
-  async createTask(newTask: CreateTaskRequestSchema) {
+  async createTask(newTask: CreateTaskRequest) {
     const res = await createTask(newTask);
     if (res instanceof Error) throw res;
     else return res;

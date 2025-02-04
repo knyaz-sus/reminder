@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import {
-  CreateProjectRequestSchema,
-  createProjectRequestSchema,
-} from "@/types/schemas";
+import { CreateProjectRequest } from "@/schemas/project-schema";
 import { projectApi } from "../api/project-api";
 import { MakeOptional } from "@/types";
 import { useRouter } from "next/navigation";
@@ -60,14 +57,13 @@ export const useCreateProject = () => {
   });
 
   const handleCreate = async (
-    createRequest: MakeOptional<CreateProjectRequestSchema, "adminId">
+    createRequest: MakeOptional<CreateProjectRequest, "adminId">
   ) => {
-    const { success, data } = createProjectRequestSchema.safeParse({
-      ...createRequest,
-      adminId: session?.user.id,
-    });
-
-    if (success) mutate(data);
+    if (session)
+      mutate({
+        ...createRequest,
+        adminId: session?.user.id,
+      });
   };
 
   return { handleCreate, error };
