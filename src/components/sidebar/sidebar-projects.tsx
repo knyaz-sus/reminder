@@ -12,7 +12,7 @@ import { ProjectCreateDialog } from "@/modules/project/components/project-create
 import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 import { projectApi } from "@/modules/project/api/project-api";
-import { Projects } from "@/types/schemas";
+import { Projects } from "@/schemas/project-schema";
 
 export function SidebarProjects({
   projects,

@@ -18,7 +18,7 @@ import {
 import { useDeleteTask } from "../hooks/use-delete-task";
 import { useUpdateTask } from "../hooks/use-update-task";
 import { TaskCheck } from "./task-check";
-import { Task } from "@/types/schemas";
+import { Task } from "@/schemas/task-schema";
 
 type UpdateTaskModalProps = {
   open: boolean;

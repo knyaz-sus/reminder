@@ -10,7 +10,7 @@ import { useUpdateTask } from "../hooks/use-update-task";
 import { formatTaskDate } from "../utils/format-task-date";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Task as TaskType } from "@/types/schemas";
+import { Task as TaskType } from "@/schemas/task-schema";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
