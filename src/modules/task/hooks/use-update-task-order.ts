@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tasks, tasksSchema } from "@/types/schemas";
 import { taskApi } from "../api/task-api";
+import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateTaskOrder = (queryKey: string) => {
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
     mutationFn: taskApi.updateTaskOrder,
 
@@ -28,6 +30,10 @@ export const useUpdateTaskOrder = (queryKey: string) => {
         taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while updating task order.",
+        variant: "destructive",
+      });
     },
 
     onSettled() {

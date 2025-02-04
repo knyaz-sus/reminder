@@ -6,10 +6,13 @@ import {
 } from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { taskApi } from "../api/task-api";
+import { useToast } from "@/hooks/use-toast";
 
 export const useCreateTask = (projectId: string) => {
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const { session } = useAuth();
+
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
     mutationFn: taskApi.createTask,
 
@@ -46,6 +49,10 @@ export const useCreateTask = (projectId: string) => {
         taskApi.getProjectTasksQueryOptions(projectId).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while adding the task.",
+        variant: "destructive",
+      });
     },
 
     onSettled() {

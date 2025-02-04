@@ -4,10 +4,12 @@ import {
   updateTaskRequestSchema,
 } from "@/types/schemas";
 import { taskApi } from "../api/task-api";
+import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateTask = (queryKey: string) => {
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
     mutationFn: taskApi.updateTask,
 
@@ -37,6 +39,10 @@ export const useUpdateTask = (queryKey: string) => {
         taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while updating task.",
+        variant: "destructive",
+      });
     },
 
     onSettled() {

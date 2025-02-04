@@ -8,7 +8,7 @@ import {
 import { ReactNode } from "react";
 import { UserProvider } from "@/context/user-provider";
 import { ThemeProvider } from "./theme-provider";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "@/components/toaster";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -31,7 +31,7 @@ export function getQueryClient() {
   }
 }
 
-export function Provider({ children }: { children: ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
@@ -43,9 +43,9 @@ export function Provider({ children }: { children: ReactNode }) {
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </UserProvider>
-      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
