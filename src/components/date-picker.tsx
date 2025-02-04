@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 import { Button } from "@/components/button";
 import { Calendar } from "@/components/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
+import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 
 export function DatePicker({
   controlledDate,
@@ -28,10 +29,10 @@ export function DatePicker({
     setIsOpen(false);
   };
 
-  // const getDayString = () => {
-  //   if (date) return formatTaskDate(date);
-  //   return "Pick a date";
-  // };
+  const getDayString = () => {
+    if (date) return formatTaskDate(date);
+    return "Pick a date";
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +46,7 @@ export function DatePicker({
           )}
         >
           <CalendarIcon />
-          <span>{date?.toISOString()}</span>
+          <span>{getDayString()}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent side="right" alignOffset={5} className="w-auto p-0">
