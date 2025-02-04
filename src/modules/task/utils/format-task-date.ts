@@ -5,5 +5,5 @@ export const formatTaskDate = (date: Date | string | number) => {
   if (isToday(date)) return "Today";
   if (isYesterday(date)) return "Yesterday";
   if (isTomorrow(date)) return "Tomorrow";
-  return date.toISOString();
+  return date.toLocaleDateString();
 };
