@@ -7,7 +7,7 @@ import { Calendar } from "lucide-react";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
 import { useUpdateTask } from "../hooks/use-update-task";
-import { formatTaskDate } from "../utils/format-task-date";
+// import { formatTaskDate } from "../utils/format-task-date";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
@@ -64,7 +64,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             {!!props.date && (
               <button className="flex items-start gap-1 text-xs">
                 <Calendar size={14} />
-                <span>{formatTaskDate(props.date)}</span>
+                <span>{props.date}</span>
               </button>
             )}
           </div>
