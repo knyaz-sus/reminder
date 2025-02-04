@@ -1,26 +1,24 @@
 "use server";
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { projectSchema, UpdateProjectRequestSchema } from "@/types/schemas";
+import { CreateProjectRequestSchema, projectSchema } from "@/types/schemas";
 import { revalidatePath } from "next/cache";
 
-export const updateProject = async (project: UpdateProjectRequestSchema) => {
+export const createProject = async (
+  projectRequest: CreateProjectRequestSchema
+) => {
   try {
     const supabase = await createServerSupabase();
     const { data } = await supabase
       .from("projects")
-      .update(project)
-      .eq("id", project.id)
+      .insert(projectRequest)
       .select("*")
       .single()
       .throwOnError();
 
     return projectSchema.parse(data);
   } catch (error) {
-    if (error instanceof Error) {
-      error.cause = { nextNoDigest: true, originalCause: error.cause };
-      throw error;
-    }
+    if (error instanceof Error) return error;
   } finally {
     revalidatePath("/", "layout");
   }

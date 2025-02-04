@@ -21,12 +21,9 @@ export const deleteProject = async ({
     if (user.data.user?.id === validatedAdminId) {
       await supabase.from("projects").delete().eq("id", validatedProjectId);
     }
-
-    revalidatePath("/", "layout");
   } catch (error) {
-    if (error instanceof Error) {
-      error.cause = { nextNoDigest: true, originalCause: error.cause };
-      throw error;
-    }
+    if (error instanceof Error) return error;
+  } finally {
+    revalidatePath("/", "layout");
   }
 };

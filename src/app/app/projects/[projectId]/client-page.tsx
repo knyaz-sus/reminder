@@ -15,14 +15,14 @@ import { useCreateTask } from "@/modules/task/hooks/use-create-task";
 import { Task } from "@/modules/task/components/task";
 import { useParams } from "next/navigation";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { projectApi } from "@/modules/project/api/project-api";
 
 export default function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const sensors = useTaskSensors();
 
   const { data: project } = useQuery({
-    ...projectQueryOptions.getProjectQueryOptions(projectId),
+    ...projectApi.getprojectApi(projectId),
   });
 
   const { tasks, setTasks } = useQueryProjectTasks(projectId);

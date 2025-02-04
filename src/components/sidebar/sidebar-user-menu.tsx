@@ -29,7 +29,9 @@ export function SidebarUserMenu() {
               {user?.name?.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="font-semibold">{user?.name}</span>
+          <span className="max-w-32 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+            {user?.name}
+          </span>
         </SidebarMenuItem>
         <div className="flex">
           <SidebarMenuItem>

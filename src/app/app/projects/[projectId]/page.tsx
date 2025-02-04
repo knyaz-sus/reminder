@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import ProjectPage from "./client-page";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { taskApi } from "@/modules/task/api/task-api";
-import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { projectApi } from "@/modules/project/api/project-api";
 import { makeQueryClient } from "@/lib/get-query-client";
 
 export default async function Project({
@@ -19,9 +19,7 @@ export default async function Project({
     queryClient.fetchQuery(
       taskApi.getProjectTasksQueryOptions(projectId, supabase)
     ),
-    queryClient.fetchQuery(
-      projectQueryOptions.getProjectQueryOptions(projectId, supabase)
-    ),
+    queryClient.fetchQuery(projectApi.getprojectApi(projectId, supabase)),
   ]);
 
   if (queries[0].status !== "fulfilled" || queries[1].status !== "fulfilled") {

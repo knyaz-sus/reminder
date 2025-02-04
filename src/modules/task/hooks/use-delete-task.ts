@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTask } from "../api/actions/delete-task";
 import { taskApi } from "../api/task-api";
 import { useToast } from "@/hooks/use-toast";
 

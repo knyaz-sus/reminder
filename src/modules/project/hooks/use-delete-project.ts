@@ -4,31 +4,30 @@ import {
   DeleteProjectRequestSchema,
   deleteProjectRequestSchema,
 } from "@/types/schemas";
-import { deleteProject } from "../api/delete-project";
-import { projectQueryOptions } from "../api/project-query-options";
+import { projectApi } from "../api/project-api";
 import { usePathname } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export const useDeleteProject = () => {
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const { session } = useAuth();
   const pathname = usePathname();
 
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: deleteProject,
+    mutationFn: projectApi.deleteProject,
 
     async onMutate(vars) {
       await queryClient.cancelQueries({
-        queryKey: projectQueryOptions.baseKey,
+        queryKey: projectApi.baseKey,
       });
 
       const previousData = queryClient.getQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
       );
 
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         (old = []) => old.filter((el) => el.id !== vars.id)
       );
 
@@ -36,13 +35,16 @@ export const useDeleteProject = () => {
     },
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while deleting the project.",
+        variant: "destructive",
+      });
     },
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
     },
   });
 

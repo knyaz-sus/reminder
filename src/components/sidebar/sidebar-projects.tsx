@@ -11,7 +11,7 @@ import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { ProjectCreateDialog } from "@/modules/project/components/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
-import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { projectApi } from "@/modules/project/api/project-api";
 import { Projects } from "@/types/schemas";
 
 export function SidebarProjects({
@@ -21,7 +21,7 @@ export function SidebarProjects({
 }) {
   const { session } = useAuth();
   const { data } = useQuery({
-    ...projectQueryOptions.getAllProjectsQueryOptions(session?.user.id),
+    ...projectApi.getAllProjectsQueryOptions(session?.user.id),
     initialData: projects,
   });
 

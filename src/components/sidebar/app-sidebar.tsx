@@ -5,7 +5,7 @@ import { SidebarUserMenu } from "./sidebar-user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { redirect } from "next/navigation";
-import { projectQueryOptions } from "@/modules/project/api/project-query-options";
+import { projectApi } from "@/modules/project/api/project-api";
 import { makeQueryClient } from "@/lib/get-query-client";
 
 export async function AppSidebar() {
@@ -17,7 +17,7 @@ export async function AppSidebar() {
 
   const queryClient = makeQueryClient();
   const projects = await queryClient.fetchQuery(
-    projectQueryOptions.getAllProjectsQueryOptions(
+    projectApi.getAllProjectsQueryOptions(
       session.data.session?.user.id,
       supabase
     )

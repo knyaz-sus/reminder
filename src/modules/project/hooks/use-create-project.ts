@@ -4,32 +4,31 @@ import {
   CreateProjectRequestSchema,
   createProjectRequestSchema,
 } from "@/types/schemas";
-import { createProject } from "../api/create-project";
-import { projectQueryOptions } from "../api/project-query-options";
+import { projectApi } from "../api/project-api";
 import { MakeOptional } from "@/types";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export const useCreateProject = () => {
-  const queryClient = useQueryClient();
-  const { session } = useAuth();
+  const { toast } = useToast();
   const router = useRouter();
+  const { session } = useAuth();
 
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: createProject,
+    mutationFn: projectApi.createProject,
 
     async onMutate(newProject) {
       await queryClient.cancelQueries({
-        queryKey: projectQueryOptions.baseKey,
+        queryKey: projectApi.baseKey,
       });
 
       const previousData = queryClient.getQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
       );
 
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         (old = []) => {
           return [
             {
@@ -46,13 +45,16 @@ export const useCreateProject = () => {
     },
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while creating the project.",
+        variant: "destructive",
+      });
     },
     onSettled(data) {
-      queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
       if (data) router.push(`/app/projects/${data.id}`);
     },
   });

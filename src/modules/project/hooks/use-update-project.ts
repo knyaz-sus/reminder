@@ -4,29 +4,28 @@ import {
   UpdateProjectRequestSchema,
 } from "@/types/schemas";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { projectQueryOptions } from "../api/project-query-options";
-import { updateProject } from "../api/update-project";
+import { projectApi } from "../api/project-api";
+import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateProject = () => {
-  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const { session } = useAuth();
 
+  const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: updateProject,
+    mutationFn: projectApi.updateProject,
 
     async onMutate(updatedProperties) {
       await queryClient.cancelQueries({
-        queryKey: projectQueryOptions.baseKey,
+        queryKey: projectApi.baseKey,
       });
 
       const previousData = queryClient.getQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
       );
 
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         (old = []) =>
           old.map((el) => {
             if (el.id === updatedProperties.id) {
@@ -37,8 +36,7 @@ export const useUpdateProject = () => {
       );
 
       queryClient.setQueryData(
-        projectQueryOptions.getProjectQueryOptions(updatedProperties.id)
-          .queryKey,
+        projectApi.getprojectApi(updatedProperties.id).queryKey,
         (old) => {
           if (old) return { ...old, ...updatedProperties };
         }
@@ -49,14 +47,17 @@ export const useUpdateProject = () => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectQueryOptions.getAllProjectsQueryOptions(session?.user.id)
-          .queryKey,
+        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
         previousData
       );
+      toast({
+        title: "An error occurred while updating the project.",
+        variant: "destructive",
+      });
     },
 
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectQueryOptions.baseKey });
+      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
     },
   });
 

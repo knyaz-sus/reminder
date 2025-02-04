@@ -3,12 +3,21 @@ import { validateUUID } from "@/utils/validate-uuid";
 import { unstable_cache } from "next/cache";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/create-browser-supabase";
-import { projectSchema, projectsSchema } from "@/types/schemas";
+import {
+  CreateProjectRequestSchema,
+  DeleteProjectRequestSchema,
+  projectSchema,
+  projectsSchema,
+  UpdateProjectRequestSchema,
+} from "@/types/schemas";
+import { createProject } from "./actions/create-project";
+import { deleteProject } from "./actions/delete-project";
+import { updateProject } from "./actions/update-project";
 
-export const projectQueryOptions = {
+export const projectApi = {
   baseKey: ["projects"],
 
-  getProjectQueryOptions(
+  getprojectApi(
     projectId: string | undefined,
     supabaseClient: SupabaseClient = supabase
   ) {
@@ -59,5 +68,20 @@ export const projectQueryOptions = {
       }),
       queryKey: ["projects", userId],
     });
+  },
+  async createProject(projectRequest: CreateProjectRequestSchema) {
+    const res = await createProject(projectRequest);
+    if (res instanceof Error) throw res;
+    else return res;
+  },
+  async deleteProject(deleteRequest: DeleteProjectRequestSchema) {
+    const res = await deleteProject(deleteRequest);
+    if (res instanceof Error) throw res;
+    else return res;
+  },
+  async updateProject(updateRequest: UpdateProjectRequestSchema) {
+    const res = await updateProject(updateRequest);
+    if (res instanceof Error) throw res;
+    else return res;
   },
 };
