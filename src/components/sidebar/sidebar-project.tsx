@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { SidebarMenuButton } from "./sidebar";
 import { Hash } from "lucide-react";
-import { Project } from "@/types/schemas";
+import { Project } from "@/schemas/project-schema";
 import { ProjectUpdateDialog } from "@/modules/project/components/project-update-dialog";
 import { usePathname } from "next/navigation";
 
