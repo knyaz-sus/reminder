@@ -6,7 +6,9 @@ import { cn } from "@/lib/cn";
 import { Button } from "@/components/button";
 import { Calendar } from "@/components/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
-import { formatTaskDate } from "@/modules/task/utils/format-task-date";
+import dynamic from "next/dynamic";
+
+const TimeNoSSR = dynamic(() => import("./time"), { ssr: false });
 
 export function DatePicker({
   controlledDate,
@@ -15,7 +17,7 @@ export function DatePicker({
   controlledDate?: Date;
   setControlledDate?: (date: Date | undefined) => void;
 }) {
-  const [localDate, setLocalDate] = useState<Date | undefined>(undefined); // Локальное состояние
+  const [localDate, setLocalDate] = useState<Date | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false);
 
   const date = controlledDate ?? localDate;
@@ -27,11 +29,6 @@ export function DatePicker({
       setLocalDate(day);
     }
     setIsOpen(false);
-  };
-
-  const getDayString = () => {
-    if (date) return formatTaskDate(date);
-    return "Pick a date";
   };
 
   return (
@@ -46,7 +43,7 @@ export function DatePicker({
           )}
         >
           <CalendarIcon />
-          <span>{getDayString()}</span>
+          {date ? <TimeNoSSR date={date} /> : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent side="right" alignOffset={5} className="w-auto p-0">
