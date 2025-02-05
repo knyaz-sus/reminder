@@ -10,15 +10,14 @@ import { useUpdateTask } from "../hooks/use-update-task";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
-import dynamic from "next/dynamic";
 import { StaticEditor } from "@/components/editor/static-editor";
-
-const TimeNoSSR = dynamic(() => import("@/components/time"), { ssr: false });
+import { useIsServer } from "@/hooks/use-is-server";
+import { formatTaskDate } from "../utils/format-task-date";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
   const { handleDone } = useUpdateTask(props.param);
-  const toggleDone = () => handleDone(props.id, !props.isDone);
+  const isServer = useIsServer();
   const {
     attributes,
     listeners,
@@ -30,7 +29,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
     id: props.id,
     disabled: !props.isSortable,
   });
-
+  const toggleDone = () => handleDone(props.id, !props.isDone);
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
@@ -67,7 +66,9 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             {!!props.date && props.param !== "today" && (
               <button className="flex items-start gap-1 text-xs">
                 <Calendar size={14} />
-                <TimeNoSSR date={props.date} />
+                {props.date && (
+                  <span>{!isServer && formatTaskDate(props.date)}</span>
+                )}
               </button>
             )}
           </div>
