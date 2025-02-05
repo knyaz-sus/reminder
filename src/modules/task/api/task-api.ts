@@ -17,17 +17,17 @@ export const taskApi = {
   baseKey: ["tasks"],
 
   getProjectTasksQueryOptions(
-    param: string,
+    projectId: string,
     supabaseClient: SupabaseClient = supabase
   ) {
     return queryOptions({
-      queryKey: ["tasks", param],
+      queryKey: ["tasks", projectId],
       queryFn: unstable_cache(async () => {
         try {
           const { data } = await supabaseClient
             .from("tasks")
             .select("*")
-            .eq("projectId", param)
+            .eq("projectId", projectId)
             .throwOnError();
 
           const validatedData = tasksSchema.parse(data);
@@ -36,6 +36,53 @@ export const taskApi = {
             const bOrder = b.order as number;
             return aOrder - bOrder;
           });
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      }),
+    });
+  },
+  getTodayTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
+    return queryOptions({
+      queryKey: ["tasks", "today"],
+      queryFn: unstable_cache(async () => {
+        try {
+          const now = new Date();
+          const startOfDay = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            0,
+            0,
+            0,
+            0
+          ).toISOString();
+          const endOfDay = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            23,
+            59,
+            59,
+            999
+          ).toISOString();
+          const {
+            data: { session },
+          } = await supabaseClient.auth.getSession();
+
+          const { data } = await supabaseClient
+            .from("tasks")
+            .select("*")
+            .gte("date", startOfDay)
+            .lte("date", endOfDay)
+            .eq("adminId", session?.user.id);
+
+          const validatedData = tasksSchema.parse(data);
+          return validatedData?.sort(
+            (a, b) =>
+              Number(new Date(a.createdAt)) - Number(new Date(b.createdAt))
+          );
         } catch (error) {
           console.log(error);
           throw error;

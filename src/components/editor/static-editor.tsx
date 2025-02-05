@@ -11,25 +11,26 @@ interface EditorProps {
   className?: string;
 }
 
-export function StaticEditor({ content, className }: EditorProps) {
+export default function StaticEditor({ content, className }: EditorProps) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     editable: false,
-    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
     content,
   });
+
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || "");
     }
   }, [content, editor]);
 
+  if (!editor) return null;
+
   return (
-    <div>
-      <EditorContent
-        editor={editor}
-        className={cn("flex-auto text-sm", className)}
-      />
-    </div>
+    <EditorContent
+      editor={editor}
+      className={cn("flex-auto text-sm", className)}
+    />
   );
 }

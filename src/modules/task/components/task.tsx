@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { StaticEditor } from "@/components/editor/static-editor";
+
 import { Separator } from "@/components/separator";
 import { Calendar } from "lucide-react";
 import { UpdateTaskModal } from "./update-task-dialog";
@@ -13,7 +13,10 @@ import { Task as TaskType } from "@/schemas/task-schema";
 import dynamic from "next/dynamic";
 
 const TimeNoSSR = dynamic(() => import("@/components/time"), { ssr: false });
-
+const StaticEditorNoSSR = dynamic(
+  () => import("@/components/editor/static-editor"),
+  { ssr: false }
+);
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
   const { handleDone } = useUpdateTask(props.param);
@@ -56,14 +59,14 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             onClick={() => setOpen(true)}
             className="flex flex-col gap-1 w-full "
           >
-            <StaticEditor content={props.title} />
+            <StaticEditorNoSSR content={props.title} />
             {!!props.description && props.description !== "<p></p>" && (
-              <StaticEditor
+              <StaticEditorNoSSR
                 className="text-xs text-foreground/80"
                 content={props.description ? props.description : undefined}
               />
             )}
-            {!!props.date && (
+            {!!props.date && props.param !== "today" && (
               <button className="flex items-start gap-1 text-xs">
                 <Calendar size={14} />
                 <TimeNoSSR date={props.date} />

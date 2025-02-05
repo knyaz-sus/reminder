@@ -3,10 +3,13 @@ import { Priorities } from "@/constants/ui";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { taskApi } from "../api/task-api";
 import { useToast } from "@/hooks/use-toast";
+import { getTaskQueryKey } from "../utils/get-task-query-key";
 
-export const useCreateTask = (projectId: string) => {
+export const useCreateTask = (param: string) => {
   const { toast } = useToast();
   const { session } = useAuth();
+
+  const queryKey = getTaskQueryKey(param);
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
@@ -17,34 +20,26 @@ export const useCreateTask = (projectId: string) => {
 
       if (!session) return;
 
-      const previousData = queryClient.getQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey
-      );
+      const previousData = queryClient.getQueryData(queryKey);
 
-      queryClient.setQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
-        (old = []) => [
-          ...old,
-          {
-            date: null,
-            isDone: false,
-            updatedAt: new Date().toISOString(),
-            priority: "4" as Priorities,
-            createdAt: new Date().toISOString(),
-            adminId: session.user.id,
-            ...newTask,
-          },
-        ]
-      );
+      queryClient.setQueryData(queryKey, (old = []) => [
+        ...old,
+        {
+          date: null,
+          isDone: false,
+          updatedAt: new Date().toISOString(),
+          priority: "4" as Priorities,
+          createdAt: new Date().toISOString(),
+          adminId: session.user.id,
+          ...newTask,
+        },
+      ]);
 
       return previousData;
     },
 
     onError(_, __, previousData) {
-      queryClient.setQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
-        previousData
-      );
+      queryClient.setQueryData(queryKey, previousData);
       toast({
         title: "An error occurred while adding the task.",
         variant: "destructive",
@@ -53,7 +48,7 @@ export const useCreateTask = (projectId: string) => {
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: taskApi.getProjectTasksQueryOptions(projectId).queryKey,
+        queryKey: queryKey,
       });
     },
   });

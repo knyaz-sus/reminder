@@ -1,18 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { taskApi } from "../api/task-api";
 
-export const useQueryPageTasks = (page: "inbox" | "today") => {
+export const useQueryPageTasks = () => {
   const {
     data: tasks,
     isPending,
     error,
   } = useQuery({
-    ...taskApi.getProjectTasksQueryOptions(page),
-    select(data) {
-      return data?.sort(
-        (a, b) => Number(new Date(a.createdAt)) - Number(new Date(b.createdAt))
-      );
-    },
+    ...taskApi.getTodayTasksQueryOptions(),
   });
   return { tasks, isPending, error };
 };

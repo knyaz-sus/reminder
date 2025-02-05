@@ -9,6 +9,7 @@ import { ReactNode } from "react";
 import { UserProvider } from "@/context/user-provider";
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "@/components/toaster";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -46,6 +47,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <Toaster />
         </ThemeProvider>
       </UserProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
