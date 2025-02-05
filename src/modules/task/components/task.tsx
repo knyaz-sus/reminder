@@ -11,12 +11,10 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
 import dynamic from "next/dynamic";
+import { StaticEditor } from "@/components/editor/static-editor";
 
 const TimeNoSSR = dynamic(() => import("@/components/time"), { ssr: false });
-const StaticEditorNoSSR = dynamic(
-  () => import("@/components/editor/static-editor"),
-  { ssr: false }
-);
+
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
   const { handleDone } = useUpdateTask(props.param);
@@ -59,9 +57,9 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             onClick={() => setOpen(true)}
             className="flex flex-col gap-1 w-full "
           >
-            <StaticEditorNoSSR content={props.title} />
+            <StaticEditor content={props.title} />
             {!!props.description && props.description !== "<p></p>" && (
-              <StaticEditorNoSSR
+              <StaticEditor
                 className="text-xs text-foreground/80"
                 content={props.description ? props.description : undefined}
               />

@@ -11,10 +11,11 @@ interface EditorProps {
   className?: string;
 }
 
-export default function StaticEditor({ content, className }: EditorProps) {
+export function StaticEditor({ content, className }: EditorProps) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     editable: false,
+    immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     content,
   });
