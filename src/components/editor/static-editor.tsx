@@ -16,7 +16,11 @@ export function StaticEditor({ content, className }: EditorProps) {
     extensions: [StarterKit, Underline],
     editable: false,
     immediatelyRender: false,
-    shouldRerenderOnTransaction: false,
+    editorProps: {
+      attributes: {
+        spellcheck: "false",
+      },
+    },
     content,
   });
 
@@ -24,7 +28,7 @@ export function StaticEditor({ content, className }: EditorProps) {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || "");
     }
-  }, [content, editor]);
+  }, [content]);
 
   if (!editor) return null;
 

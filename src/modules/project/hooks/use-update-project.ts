@@ -32,7 +32,7 @@ export const useUpdateProject = () => {
       );
 
       queryClient.setQueryData(
-        projectApi.getprojectApi(updatedProperties.id).queryKey,
+        projectApi.getProjectQueryOptions(updatedProperties.id).queryKey,
         (old) => {
           if (old) return { ...old, ...updatedProperties };
         }

@@ -19,7 +19,9 @@ export default async function Project({
     queryClient.fetchQuery(
       taskApi.getProjectTasksQueryOptions(projectId, supabase)
     ),
-    queryClient.fetchQuery(projectApi.getprojectApi(projectId, supabase)),
+    queryClient.fetchQuery(
+      projectApi.getProjectQueryOptions(projectId, supabase)
+    ),
   ]);
 
   if (queries[0].status !== "fulfilled" || queries[1].status !== "fulfilled") {

@@ -17,7 +17,7 @@ import { updateProject } from "./actions/update-project";
 export const projectApi = {
   baseKey: ["projects"],
 
-  getprojectApi(
+  getProjectQueryOptions(
     projectId: string | undefined,
     supabaseClient: SupabaseClient = supabase
   ) {

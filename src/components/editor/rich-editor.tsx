@@ -28,6 +28,7 @@ export function RichEditor({
     },
     autofocus,
     immediatelyRender: false,
+    editorProps: { attributes: { spellcheck: "false" } },
   });
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {

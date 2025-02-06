@@ -1,4 +1,5 @@
 import { priorities } from "@/constants/ui";
+import { cn } from "@/lib/cn";
 import { CircleCheck, Circle } from "lucide-react";
 
 interface TaskCheckProps {
@@ -23,7 +24,7 @@ export function TaskCheck({
       case "3":
         return "#2463eb";
       case "4":
-        return "#ffff";
+        return undefined;
     }
   };
   return (
@@ -31,7 +32,11 @@ export function TaskCheck({
       {isDone ? (
         <CircleCheck size={18} color="gray" />
       ) : (
-        <Circle size={18} color={getCheckColor()} />
+        <Circle
+          size={18}
+          color={getCheckColor()}
+          className={cn({ "text-foreground/90": priority === "4" })}
+        />
       )}
     </button>
   );

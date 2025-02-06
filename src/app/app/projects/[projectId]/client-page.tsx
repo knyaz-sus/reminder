@@ -22,7 +22,7 @@ export default function ProjectPage() {
   const sensors = useTaskSensors();
 
   const { data: project } = useQuery({
-    ...projectApi.getprojectApi(projectId),
+    ...projectApi.getProjectQueryOptions(projectId),
   });
 
   const { tasks, setTasks } = useQueryProjectTasks(projectId);
