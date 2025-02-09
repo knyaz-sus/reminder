@@ -37,12 +37,11 @@ export function RichEditor({
     if (placeholder === "Provide title...") editor?.commands.focus();
   }, [content, editor, placeholder]);
 
+  if (!editor) return null;
   return (
-    !!editor && (
-      <div>
-        <EditorContent editor={editor} className="text-sm" />
-        <BubbleMenuEditor editor={editor} />
-      </div>
-    )
+    <div>
+      <EditorContent editor={editor} className="text-sm" />
+      <BubbleMenuEditor editor={editor} />
+    </div>
   );
 }

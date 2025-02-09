@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
 import { validateUUID } from "@/schemas/utils/validate-uuid";
-import { unstable_cache } from "next/cache";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/create-browser-supabase";
 import {
@@ -22,7 +21,7 @@ export const projectApi = {
     supabaseClient: SupabaseClient = supabase
   ) {
     return queryOptions({
-      queryFn: unstable_cache(async () => {
+      queryFn: async () => {
         try {
           const validatedId = validateUUID(projectId);
           const { data } = await supabaseClient
@@ -37,7 +36,7 @@ export const projectApi = {
           console.log(error);
           throw error;
         }
-      }),
+      },
       queryKey: ["projects", projectId],
     });
   },
@@ -47,7 +46,7 @@ export const projectApi = {
     supabaseClient: SupabaseClient = supabase
   ) {
     return queryOptions({
-      queryFn: unstable_cache(async () => {
+      queryFn: async () => {
         try {
           const validatedId = validateUUID(userId);
           const { data: projects } = await supabaseClient
@@ -65,7 +64,7 @@ export const projectApi = {
           console.log(error);
           throw error;
         }
-      }),
+      },
       queryKey: ["projects", userId],
     });
   },

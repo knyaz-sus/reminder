@@ -7,7 +7,6 @@ import {
 } from "@/schemas/task-schema";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
-import { unstable_cache } from "next/cache";
 import { updateTaskOrder } from "./actions/update-task-order";
 import { updateTask } from "./actions/update-task";
 import { deleteTask } from "./actions/delete-task";
@@ -22,7 +21,7 @@ export const taskApi = {
   ) {
     return queryOptions({
       queryKey: ["tasks", projectId],
-      queryFn: unstable_cache(async () => {
+      queryFn: async () => {
         try {
           const { data } = await supabaseClient
             .from("tasks")
@@ -40,13 +39,13 @@ export const taskApi = {
           console.log(error);
           throw error;
         }
-      }),
+      },
     });
   },
   getTodayTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
     return queryOptions({
       queryKey: ["tasks", "today"],
-      queryFn: unstable_cache(async () => {
+      queryFn: async () => {
         try {
           const now = new Date();
           const startOfDay = new Date(
@@ -87,7 +86,7 @@ export const taskApi = {
           console.log(error);
           throw error;
         }
-      }),
+      },
     });
   },
   async updateTaskOrder(updatedTasks: Tasks) {

@@ -3,7 +3,6 @@ import { userSchema } from "@/schemas/user-schema";
 import { validateUUID } from "@/schemas/utils/validate-uuid";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
-import { unstable_cache } from "next/cache";
 
 export const userApi = {
   getUserQueryOptions(
@@ -12,7 +11,7 @@ export const userApi = {
   ) {
     return queryOptions({
       queryKey: ["user"],
-      queryFn: unstable_cache(async () => {
+      queryFn: async () => {
         const validatedId = validateUUID(id);
 
         const { data } = await supabaseClient
@@ -23,7 +22,7 @@ export const userApi = {
           .throwOnError();
 
         return userSchema.parse(data);
-      }),
+      },
     });
   },
 };
