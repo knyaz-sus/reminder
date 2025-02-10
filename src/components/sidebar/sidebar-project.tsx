@@ -17,7 +17,6 @@ export function SidebarProject(project: Project) {
     >
       <div className="flex justify-between pr-0">
         <Link
-          prefetch
           className="flex flex-auto items-center max-w-full ml-1 overflow-hidden gap-2 [&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground"
           href={`/app/projects/${project.id}`}
         >
