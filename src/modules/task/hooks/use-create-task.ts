@@ -48,7 +48,7 @@ export const useCreateTask = (param: string) => {
 
     onSettled() {
       queryClient.invalidateQueries({
-        queryKey: queryKey,
+        queryKey: taskApi.baseKey,
       });
     },
   });
