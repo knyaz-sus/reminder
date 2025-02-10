@@ -10,7 +10,7 @@ import { useMemo } from "react";
 export default function TodayPage() {
   const { mutate: handleCreate } = useCreateTask("today");
 
-  const { tasks } = useQueryPageTasks();
+  const { tasks, isPending } = useQueryPageTasks();
 
   const defaultDate = useMemo(() => startOfDay(new Date()), []);
 
@@ -18,15 +18,21 @@ export default function TodayPage() {
     <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
       <h1 className="mb-4">Today</h1>
       <div className="flex flex-col">
-        {tasks?.map((task) => (
-          <Task param="today" isSortable={false} key={task.id} {...task} />
-        ))}
-        <CreateTask
-          projectId={null}
-          createTask={handleCreate}
-          order={null}
-          defaultDate={defaultDate}
-        />
+        {isPending ? (
+          <h2>Loading...</h2>
+        ) : (
+          <>
+            {tasks?.map((task) => (
+              <Task param="today" isSortable={false} key={task.id} {...task} />
+            ))}
+            <CreateTask
+              projectId={null}
+              createTask={handleCreate}
+              order={null}
+              defaultDate={defaultDate}
+            />
+          </>
+        )}
       </div>
     </div>
   );
