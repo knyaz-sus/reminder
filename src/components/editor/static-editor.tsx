@@ -28,7 +28,7 @@ export function StaticEditor({ content, className }: EditorProps) {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || "");
     }
-  }, [content]);
+  }, [content, editor]);
 
   if (!editor) return null;
 

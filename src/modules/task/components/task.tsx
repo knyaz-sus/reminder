@@ -27,7 +27,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
     isDragging,
   } = useSortable({
     id: props.id,
-    disabled: !props.isSortable,
+    disabled: !props.isSortable || open,
   });
   const toggleDone = () => handleDone(props.id, !props.isDone);
   const style = {

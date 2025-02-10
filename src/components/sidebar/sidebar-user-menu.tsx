@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "./sidebar";
 import { signOut } from "@/modules/auth/api/sign-out";
 
@@ -35,8 +36,8 @@ export function SidebarUserMenu() {
         </SidebarMenuItem>
         <div className="flex">
           <SidebarMenuItem>
-            <SidebarMenuButton size="sm">
-              <Settings />
+            <SidebarMenuButton asChild size="sm">
+              <SidebarTrigger />
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
