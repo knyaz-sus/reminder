@@ -5,13 +5,14 @@ import { Task } from "@/modules/task/components/task";
 import { useCreateTask } from "@/modules/task/hooks/use-create-task";
 import { useQueryPageTasks } from "@/modules/task/hooks/use-query-page-tasks";
 import { startOfDay } from "date-fns";
+import { useMemo } from "react";
 
 export default function TodayPage() {
   const { mutate: handleCreate } = useCreateTask("today");
 
   const { tasks } = useQueryPageTasks();
 
-  const defaultDate = startOfDay(new Date());
+  const defaultDate = useMemo(() => startOfDay(new Date()), []);
 
   return (
     <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
