@@ -42,7 +42,6 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
       ref={setNodeRef}
       style={style}
       className="flex flex-col gap-2 mb-2 bg-background touch-none"
-      aria-describedby=""
     >
       <div className="flex cursor-pointer group flex-col">
         <div className="flex items-start w-full py-1 gap-2">
