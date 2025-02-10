@@ -23,6 +23,11 @@ export function SidebarProjects({
   const { data } = useQuery({
     ...projectApi.getAllProjectsQueryOptions(session?.user.id),
     initialData: projects,
+    select(data) {
+      return data.sort(
+        (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
+      );
+    },
   });
 
   return (

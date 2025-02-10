@@ -55,11 +55,7 @@ export const projectApi = {
             .eq("adminId", validatedId)
             .throwOnError();
 
-          const validatedData = projectsSchema.parse(projects);
-          return validatedData.sort(
-            (a, b) =>
-              Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
-          );
+          return projectsSchema.parse(projects);
         } catch (error) {
           console.log(error);
           throw error;

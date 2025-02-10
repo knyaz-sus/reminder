@@ -29,12 +29,7 @@ export const taskApi = {
             .eq("projectId", projectId)
             .throwOnError();
 
-          const validatedData = tasksSchema.parse(data);
-          return validatedData.sort((a, b) => {
-            const aOrder = a.order as number;
-            const bOrder = b.order as number;
-            return aOrder - bOrder;
-          });
+          return tasksSchema.parse(data);
         } catch (error) {
           console.log(error);
           throw error;
@@ -77,11 +72,7 @@ export const taskApi = {
             .lte("date", endOfDay)
             .eq("adminId", session?.user.id);
 
-          const validatedData = tasksSchema.parse(data);
-          return validatedData?.sort(
-            (a, b) =>
-              Number(new Date(a.createdAt)) - Number(new Date(b.createdAt))
-          );
+          return tasksSchema.parse(data);
         } catch (error) {
           console.log(error);
           throw error;
