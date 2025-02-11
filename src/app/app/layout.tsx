@@ -30,7 +30,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
         <AppHeader />
-        <main className="flex justify-center pb-6 pt-16 flex-auto ">
+        <main className="flex justify-center px-4 pb-6 pt-16 flex-auto ">
           {children}
         </main>
       </SidebarProvider>

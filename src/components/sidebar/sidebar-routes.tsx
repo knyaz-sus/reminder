@@ -1,6 +1,8 @@
 "use client";
 
-import { Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Inbox, Search, SquareChartGantt } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,9 +10,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./sidebar";
-import { sidebarMenuRoutes } from "./constants";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export function SidebarRoutes() {
   const pathname = usePathname();
@@ -24,19 +23,22 @@ export function SidebarRoutes() {
               <span>Search</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          {sidebarMenuRoutes.map((route, index) => {
-            const { path, name, Icon } = route;
-            return (
-              <SidebarMenuItem key={path + index}>
-                <SidebarMenuButton asChild isActive={pathname === path}>
-                  <Link href={path} prefetch>
-                    <Icon />
-                    <span>{name}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            );
-          })}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={pathname === "/app/inbox"}>
+              <Link href="/app/inbox" prefetch>
+                <Inbox />
+                <span>Inbox</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={pathname === "/app/today"}>
+              <Link href="/app/today" prefetch>
+                <SquareChartGantt />
+                <span>Today</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

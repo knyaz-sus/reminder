@@ -80,7 +80,27 @@ export const taskApi = {
       },
     });
   },
-  
+
+  getInboxTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
+    return queryOptions({
+      queryKey: ["tasks", "inbox"],
+      queryFn: async () => {
+        try {
+          const { data } = await supabaseClient
+            .from("tasks")
+            .select("*")
+            .is("projectId", null)
+            .throwOnError();
+
+          return tasksSchema.parse(data);
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      },
+    });
+  },
+
   async updateTask(updatedProperties: UpdateTaskRequest) {
     const validatedData = updateTaskRequestSchema.parse(updatedProperties);
 

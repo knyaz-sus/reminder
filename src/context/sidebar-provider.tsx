@@ -19,7 +19,7 @@ import {
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
   SIDEBAR_WIDTH_ICON,
-} from "@/components/sidebar/constants";
+} from "@/components/sidebar/sidebar";
 
 interface ISidebarContext {
   state: "expanded" | "collapsed";

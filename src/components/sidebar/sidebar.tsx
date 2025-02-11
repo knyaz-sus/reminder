@@ -17,8 +17,14 @@ import {
 import { Skeleton } from "@/components/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/tooltip";
 import { useSidebar } from "@/hooks/use-sidebar";
-import { SIDEBAR_WIDTH_MOBILE } from "./constants";
 import { sidebarMenuButtonVariants } from "@/components/variants/sidebar-menu-button-variants";
+
+export const SIDEBAR_WIDTH = "16rem";
+export const SIDEBAR_WIDTH_MOBILE = "18rem";
+export const SIDEBAR_WIDTH_ICON = "3rem";
+export const SIDEBAR_KEYBOARD_SHORTCUT = "m";
+export const SIDEBAR_COOKIE_NAME = "sidebar:state";
+export const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 const Sidebar = React.forwardRef<
   HTMLDivElement,
