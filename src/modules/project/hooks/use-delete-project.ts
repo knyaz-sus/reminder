@@ -2,13 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { DeleteProjectRequest } from "@/schemas/project-schema";
 import { projectApi } from "../project-api";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
 export const useDeleteProject = () => {
   const { toast } = useToast();
   const { session } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
@@ -47,7 +48,7 @@ export const useDeleteProject = () => {
 
   const handleDelete = (deleteRequest: DeleteProjectRequest) => {
     if (pathname.includes(deleteRequest.id)) {
-      window.history.replaceState(null, "", "/app/today");
+      router.replace("/app/today");
     }
     mutate(deleteRequest);
   };
