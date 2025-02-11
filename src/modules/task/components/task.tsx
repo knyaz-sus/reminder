@@ -6,7 +6,7 @@ import { Separator } from "@/components/separator";
 import { Calendar } from "lucide-react";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
-import { useUpdateTask } from "../hooks/use-update-task";
+import { useUpdateTask } from "../hooks/api/use-update-task";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
@@ -42,6 +42,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
       ref={setNodeRef}
       style={style}
       className="flex flex-col gap-2 mb-2 bg-background touch-none"
+      aria-describedby=""
     >
       <div className="flex cursor-pointer group flex-col">
         <div className="flex items-start w-full py-1 gap-2">
@@ -64,9 +65,11 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             )}
             {!!props.date && props.param !== "today" && (
               <button className="flex items-start gap-1 text-xs">
-                <Calendar size={14} />
-                {props.date && (
-                  <span>{!isServer && formatTaskDate(props.date)}</span>
+                {props.date && !isServer && (
+                  <>
+                    <Calendar size={14} />
+                    <span>{formatTaskDate(props.date)}</span>
+                  </>
                 )}
               </button>
             )}

@@ -1,9 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useQueryProjectTasks } from "@/modules/task/hooks/use-query-project-tasks";
+import { useQueryProjectTasks } from "@/modules/task/hooks/api/use-query-project-tasks";
 import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
-import { useUpdateTaskOrder } from "@/modules/task/hooks/use-update-task-order";
+import { useUpdateTaskOrder } from "@/modules/task/hooks/api/use-update-task-order";
 import { closestCorners, DndContext, DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -11,13 +11,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CreateTask } from "@/modules/task/components/create-task";
-import { useCreateTask } from "@/modules/task/hooks/use-create-task";
+import { useCreateTask } from "@/modules/task/hooks/api/use-create-task";
 import { Task } from "@/modules/task/components/task";
 import { useParams } from "next/navigation";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { projectApi } from "@/modules/project/api/project-api";
+import { projectApi } from "@/modules/project/project-api";
 
-export default function ProjectPage() {
+export function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const sensors = useTaskSensors();
 

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Priorities } from "@/constants/ui";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { taskApi } from "../api/task-api";
+import { taskApi } from "../../task-api";
 import { useToast } from "@/hooks/use-toast";
-import { getTaskQueryKey } from "../utils/get-task-query-key";
+import { getTaskQueryKey } from "../../utils/get-task-query-key";
 
 export const useCreateTask = (param: string) => {
   const { toast } = useToast();

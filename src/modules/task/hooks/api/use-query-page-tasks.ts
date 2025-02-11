@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { taskApi } from "../api/task-api";
+import { taskApi } from "../../task-api";
 
 export const useQueryPageTasks = () => {
   const {

@@ -4,14 +4,14 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/create-browser-supabase";
 import {
   CreateProjectRequest,
+  createProjectRequestSchema,
   DeleteProjectRequest,
+  deleteProjectRequestSchema,
   projectSchema,
   projectsSchema,
   UpdateProjectRequest,
+  updateProjectRequestSchema,
 } from "@/schemas/project-schema";
-import { createProject } from "./actions/create-project";
-import { deleteProject } from "./actions/delete-project";
-import { updateProject } from "./actions/update-project";
 
 export const projectApi = {
   baseKey: ["projects"],
@@ -64,19 +64,39 @@ export const projectApi = {
       queryKey: ["projects", userId],
     });
   },
+
   async createProject(projectRequest: CreateProjectRequest) {
-    const res = await createProject(projectRequest);
-    if (res instanceof Error) throw res;
-    else return res;
+    createProjectRequestSchema.parse(projectRequest);
+
+    const { data } = await supabase
+      .from("projects")
+      .insert(projectRequest)
+      .select("*")
+      .single()
+      .throwOnError();
+
+    return projectSchema.parse(data);
   },
+
   async deleteProject(deleteRequest: DeleteProjectRequest) {
-    const res = await deleteProject(deleteRequest);
-    if (res instanceof Error) throw res;
-    else return res;
+    const validatedRequest = deleteProjectRequestSchema.parse(deleteRequest);
+
+    await supabase.from("projects").delete().eq("id", validatedRequest.id);
+
+    return { message: "Project deleted succesfully" };
   },
+
   async updateProject(updateRequest: UpdateProjectRequest) {
-    const res = await updateProject(updateRequest);
-    if (res instanceof Error) throw res;
-    else return res;
+    const validatedRequest = updateProjectRequestSchema.parse(updateRequest);
+
+    const { data } = await supabase
+      .from("projects")
+      .update(validatedRequest)
+      .eq("id", validatedRequest.id)
+      .select("*")
+      .single()
+      .throwOnError();
+
+    return projectSchema.parse(data);
   },
 };

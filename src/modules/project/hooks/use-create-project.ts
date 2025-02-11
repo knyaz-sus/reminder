@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { CreateProjectRequest } from "@/schemas/project-schema";
-import { projectApi } from "../api/project-api";
+import { projectApi } from "../project-api";
 import { MakeOptional } from "@/types";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";

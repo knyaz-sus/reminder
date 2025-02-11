@@ -1,8 +1,8 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import ProjectPage from "./client-page";
+import { ProjectPage } from "./client-page";
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { taskApi } from "@/modules/task/api/task-api";
-import { projectApi } from "@/modules/project/api/project-api";
+import { taskApi } from "@/modules/task/task-api";
+import { projectApi } from "@/modules/project/project-api";
 import { makeQueryClient } from "@/lib/get-query-client";
 
 export default async function Project({

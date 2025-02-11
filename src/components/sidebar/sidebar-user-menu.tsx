@@ -20,6 +20,10 @@ export function SidebarUserMenu() {
   const { data: user } = useQuery({
     ...userApi.getUserQueryOptions(session?.user.id),
   });
+  const handleSignOut = () => {
+    queryClient.clear();
+    signOut();
+  };
   return (
     <SidebarHeader>
       <SidebarMenu className="flex-row justify-between items-center">
@@ -36,18 +40,13 @@ export function SidebarUserMenu() {
         </SidebarMenuItem>
         <div className="flex">
           <SidebarMenuItem>
-            <SidebarMenuButton asChild size="sm">
-              <SidebarTrigger />
+            <SidebarMenuButton size="sm">
+              <LogOut onClick={handleSignOut} />
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton size="sm">
-              <LogOut
-                onClick={() => {
-                  queryClient.clear();
-                  signOut();
-                }}
-              />
+            <SidebarMenuButton asChild size="sm">
+              <SidebarTrigger />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </div>

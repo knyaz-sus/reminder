@@ -1,16 +1,15 @@
 import { supabase } from "@/lib/supabase/create-browser-supabase";
 import {
   CreateTaskRequest,
+  createTaskRequestSchema,
   Tasks,
   tasksSchema,
   UpdateTaskRequest,
+  updateTaskRequestSchema,
 } from "@/schemas/task-schema";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
-import { updateTaskOrder } from "./actions/update-task-order";
-import { updateTask } from "./actions/update-task";
-import { deleteTask } from "./actions/delete-task";
-import { createTask } from "./actions/create-task";
+import { validateUUID } from "@/schemas/utils/validate-uuid";
 
 export const taskApi = {
   baseKey: ["tasks"],
@@ -37,6 +36,7 @@ export const taskApi = {
       },
     });
   },
+
   getTodayTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
     return queryOptions({
       queryKey: ["tasks", "today"],
@@ -80,24 +80,50 @@ export const taskApi = {
       },
     });
   },
-  async updateTaskOrder(updatedTasks: Tasks) {
-    const res = await updateTaskOrder(updatedTasks);
-    if (res instanceof Error) throw res;
-    else return res;
-  },
+  
   async updateTask(updatedProperties: UpdateTaskRequest) {
-    const res = await updateTask(updatedProperties);
-    if (res instanceof Error) throw res;
-    else return res;
+    const validatedData = updateTaskRequestSchema.parse(updatedProperties);
+
+    const { data } = await supabase
+      .from("tasks")
+      .update(validatedData)
+      .eq("id", validatedData.id)
+      .select("*")
+      .throwOnError();
+
+    return tasksSchema.parse(data);
   },
+
+  async updateTaskOrder(updatedTasks: Tasks) {
+    const validatedData = tasksSchema.parse(updatedTasks);
+
+    const { data } = await supabase
+      .from("tasks")
+      .upsert(validatedData, { onConflict: "id" })
+      .select()
+      .throwOnError();
+
+    return tasksSchema.parse(data);
+  },
+
   async deleteTask(id: string) {
-    const res = await deleteTask(id);
-    if (res instanceof Error) throw res;
-    else return res;
+    const validatedId = validateUUID(id);
+
+    await supabase.from("tasks").delete().eq("id", validatedId).throwOnError();
+
+    return { message: "Task deleted succesfully" };
   },
-  async createTask(newTask: CreateTaskRequest) {
-    const res = await createTask(newTask);
-    if (res instanceof Error) throw res;
-    else return res;
+
+  async createTask(createRequest: CreateTaskRequest) {
+    const validatedRequest = createTaskRequestSchema.parse(createRequest);
+
+    const session = await supabase.auth.getSession();
+    const { data } = await supabase
+      .from("tasks")
+      .insert({ ...validatedRequest, adminId: session.data.session?.user.id })
+      .select("*")
+      .throwOnError();
+
+    return tasksSchema.parse(data);
   },
 };

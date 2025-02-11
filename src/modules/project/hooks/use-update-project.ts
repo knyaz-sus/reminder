@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { projectApi } from "../api/project-api";
+import { projectApi } from "../project-api";
 import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateProject = () => {

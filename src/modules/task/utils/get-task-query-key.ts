@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { taskApi } from "../api/task-api";
+import { taskApi } from "../task-api";
 
 export const getTaskQueryKey = (param: string) => {
   if (z.string().uuid().safeParse(param).success) {

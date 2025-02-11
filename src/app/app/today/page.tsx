@@ -2,8 +2,8 @@
 
 import { CreateTask } from "@/modules/task/components/create-task";
 import { Task } from "@/modules/task/components/task";
-import { useCreateTask } from "@/modules/task/hooks/use-create-task";
-import { useQueryPageTasks } from "@/modules/task/hooks/use-query-page-tasks";
+import { useCreateTask } from "@/modules/task/hooks/api/use-create-task";
+import { useQueryPageTasks } from "@/modules/task/hooks/api/use-query-page-tasks";
 import { startOfDay } from "date-fns";
 import { useMemo } from "react";
 

@@ -1,24 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { taskApi } from "../api/task-api";
+import { taskApi } from "../../task-api";
 import { useToast } from "@/hooks/use-toast";
 
-export const useDeleteTask = (projectId: string) => {
+export const useUpdateTaskOrder = (queryKey: string) => {
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: taskApi.deleteTask,
+    mutationFn: taskApi.updateTaskOrder,
 
-    async onMutate(id) {
+    async onMutate(tasks) {
       await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey
       );
 
       queryClient.setQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
-        (old = []) => old.filter((el) => el.id !== id)
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
+        () => tasks
       );
 
       return previousData;
@@ -26,17 +26,13 @@ export const useDeleteTask = (projectId: string) => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        taskApi.getProjectTasksQueryOptions(projectId).queryKey,
+        taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
         previousData
       );
       toast({
-        title: "An error occurred while deleting the task.",
+        title: "An error occurred while updating task order.",
         variant: "destructive",
       });
-    },
-
-    onSettled() {
-      queryClient.invalidateQueries({ queryKey: taskApi.baseKey });
     },
   });
 

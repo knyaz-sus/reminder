@@ -11,7 +11,7 @@ import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { ProjectCreateDialog } from "@/modules/project/components/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
-import { projectApi } from "@/modules/project/api/project-api";
+import { projectApi } from "@/modules/project/project-api";
 import { Projects } from "@/schemas/project-schema";
 
 export function SidebarProjects({

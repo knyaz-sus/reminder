@@ -1,15 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { taskApi } from "../api/task-api";
+import { UpdateTaskRequest } from "@/schemas/task-schema";
+import { taskApi } from "../../task-api";
 import { useToast } from "@/hooks/use-toast";
 
-export const useUpdateTaskOrder = (queryKey: string) => {
+export const useUpdateTask = (queryKey: string) => {
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
-    mutationFn: taskApi.updateTaskOrder,
+    mutationFn: taskApi.updateTask,
 
-    async onMutate(tasks) {
+    async onMutate(updatedProperties) {
       await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
       const previousData = queryClient.getQueryData(
@@ -18,7 +19,13 @@ export const useUpdateTaskOrder = (queryKey: string) => {
 
       queryClient.setQueryData(
         taskApi.getProjectTasksQueryOptions(queryKey).queryKey,
-        () => tasks
+        (old = []) =>
+          old.map((el) => {
+            if (el.id === updatedProperties.id) {
+              return { ...el, ...updatedProperties };
+            }
+            return el;
+          })
       );
 
       return previousData;
@@ -30,7 +37,7 @@ export const useUpdateTaskOrder = (queryKey: string) => {
         previousData
       );
       toast({
-        title: "An error occurred while updating task order.",
+        title: "An error occurred while updating task.",
         variant: "destructive",
       });
     },
@@ -40,5 +47,11 @@ export const useUpdateTaskOrder = (queryKey: string) => {
     },
   });
 
-  return { mutate, error };
+  const handleUpdate = (updateProperties: UpdateTaskRequest) => {
+    mutate(updateProperties);
+  };
+
+  const handleDone = (id: string, isDone: boolean) => mutate({ id, isDone });
+
+  return { handleUpdate, handleDone, error };
 };

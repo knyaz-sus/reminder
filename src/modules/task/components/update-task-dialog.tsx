@@ -15,10 +15,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/dialog";
-import { useDeleteTask } from "../hooks/use-delete-task";
-import { useUpdateTask } from "../hooks/use-update-task";
+
 import { TaskCheck } from "./task-check";
 import { Task } from "@/schemas/task-schema";
+import { useDeleteTask } from "../hooks/api/use-delete-task";
+import { useUpdateTask } from "../hooks/api/use-update-task";
 
 type UpdateTaskModalProps = {
   open: boolean;
