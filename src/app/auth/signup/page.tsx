@@ -9,11 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpWithPassword } from "@/modules/auth/api/sign-up-with-password";
 import Link from "next/link";
 import { ErrorMessage } from "@/components/error-message";
+import { Spinner } from "@/components/spinner";
 
 export default function SignUpForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { register, handleSubmit, formState, reset } = useForm<SingUpSchema>({
     resolver: zodResolver(singUpSchema),
+    defaultValues: { name: "", email: "", password: "" },
   });
   const handleSignUp: SubmitHandler<SingUpSchema> = async (formData) => {
     await signUpWithPassword(formData.name, formData.email, formData.password);
@@ -28,7 +30,10 @@ export default function SignUpForm() {
         id="signup-form"
         name="signup-form"
       >
-        <h1 className="mb-2">Sign up</h1>
+        <div className="flex justify-between items-center mb-2">
+          <h1>Sign up</h1>
+          {formState.isSubmitting && <Spinner />}
+        </div>
         <div className="flex flex-col gap-3 mb-2">
           <FormField
             register={register}

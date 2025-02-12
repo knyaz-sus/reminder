@@ -10,6 +10,8 @@ import { FormField } from "@/modules/auth/components/form-field";
 import { useState } from "react";
 import { ErrorMessage } from "@/components/error-message";
 import Link from "next/link";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { Spinner } from "@/components/spinner";
 
 export default function SignInForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -30,9 +32,19 @@ export default function SignInForm() {
         id="signin-form"
         name="signin-form"
       >
-        <h1 className="mb-2">Sign in</h1>
-        <Button type="button" onClick={signInWithGithub}>
-          <span>Sign in with github</span>
+        <div className="flex justify-between items-center mb-2">
+          <h1>Sign in</h1>
+          {formState.isSubmitting && <Spinner />}
+        </div>
+        <Button
+          className="justify-start relative"
+          type="button"
+          onClick={signInWithGithub}
+        >
+          <GitHubLogoIcon />
+          <span className="absolute left-0 right-0 text-center">
+            Sign in with github
+          </span>
         </Button>
         <div className="flex flex-col gap-3 mb-2">
           <FormField
