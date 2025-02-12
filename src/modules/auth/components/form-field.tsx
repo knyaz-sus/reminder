@@ -1,5 +1,5 @@
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
-import { ErrorSpan } from "@/components/error-message";
+import { ErrorMessage } from "@/components/error-message";
 import { Input } from "@/components/input";
 
 interface FormFieldProps<T extends FieldValues> {
@@ -27,7 +27,7 @@ export function FormField<T extends FieldValues>({
         id={name}
         autoComplete={name}
       />
-      {error && <ErrorSpan>{error}</ErrorSpan>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </div>
   );
 }

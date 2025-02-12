@@ -11,7 +11,10 @@ export const signInWithPassword = async (email: string, password: string) => {
     password,
   });
 
-  if (error) redirect("/auth");
+  if (error) {
+    return { message: error.message };
+  }
+
   revalidatePath("/", "layout");
 
   redirect("/app/today");

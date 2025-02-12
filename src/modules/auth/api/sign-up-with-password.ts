@@ -17,7 +17,9 @@ export const signUpWithPassword = async (
     options: { data: { name } },
   });
 
-  if (error) redirect("/auth");
+  if (error) {
+    return { message: error.message };
+  }
 
   revalidatePath("/", "layout");
   redirect("/app/today");

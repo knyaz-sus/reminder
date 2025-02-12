@@ -7,18 +7,20 @@ import { signInSchema, SingInSchema } from "@/modules/auth/schemas";
 import { signInWithPassword } from "@/modules/auth/api/sign-in-with-password";
 import { signInWithGithub } from "@/modules/auth/api/sign-in-with-github";
 import { FormField } from "@/modules/auth/components/form-field";
-import { FormFooter } from "@/modules/auth/components/form-footer";
+import { useState } from "react";
+import { ErrorMessage } from "@/components/error-message";
+import Link from "next/link";
 
 export default function SignInForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SingInSchema>({
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { register, handleSubmit, formState, reset } = useForm<SingInSchema>({
     resolver: zodResolver(signInSchema),
+    defaultValues: { email: "", password: "" },
   });
-  const handleSignIn: SubmitHandler<SingInSchema> = (formData) => {
-    signInWithPassword(formData.email, formData.password);
+  const handleSignIn: SubmitHandler<SingInSchema> = async (formData) => {
+    const error = await signInWithPassword(formData.email, formData.password);
+    setSubmitError(error.message);
+    reset();
   };
   return (
     <div className="rounded-md border border-border w-full max-w-sm p-6">
@@ -35,23 +37,27 @@ export default function SignInForm() {
         <div className="flex flex-col gap-3 mb-2">
           <FormField
             register={register}
-            error={errors.email?.message}
+            error={formState.errors.email?.message}
             name="email"
           />
           <FormField
             register={register}
-            error={errors.password?.message}
+            error={formState.errors.password?.message}
             name="password"
             type="password"
           />
         </div>
         <Button type="submit">Sign in with password</Button>
       </form>
-      <FormFooter
-        path="/auth/signup"
-        content="New to Reminder? "
-        link="Sign up"
-      />
+      <div className="text-sm text-center">
+        <span>New to Reminder? </span>
+        <Link className="underline" href="/auth/signup">
+          Sign up
+        </Link>
+      </div>
+      {submitError && !formState.isDirty && (
+        <ErrorMessage className="text-center block">{submitError}</ErrorMessage>
+      )}
     </div>
   );
 }

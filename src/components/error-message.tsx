@@ -1,5 +1,12 @@
-import { ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
-export function ErrorSpan({ children }: { children: ReactNode }) {
-  return <span className="text-sm text-red-400 p-1">{children}</span>;
+export function ErrorMessage({
+  children,
+  className,
+}: React.HTMLAttributes<"span">) {
+  return (
+    <span className={cn("text-sm text-red-400 p-1", className)}>
+      {children}
+    </span>
+  );
 }
