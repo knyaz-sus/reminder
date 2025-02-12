@@ -31,6 +31,7 @@ export const useCreateTask = (param: string) => {
           priority: "4" as Priorities,
           createdAt: new Date().toISOString(),
           adminId: session.user.id,
+          doneAt: null,
           ...newTask,
         },
       ]);

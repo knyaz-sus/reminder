@@ -12,13 +12,14 @@ import {
   UpdateProjectRequest,
   updateProjectRequestSchema,
 } from "@/schemas/project-schema";
+import { Database } from "@/types/database";
 
 export const projectApi = {
   baseKey: ["projects"],
 
   getProjectQueryOptions(
-    projectId: string | undefined,
-    supabaseClient: SupabaseClient = supabase
+    projectId: string | null,
+    supabaseClient: SupabaseClient<Database> = supabase
   ) {
     return queryOptions({
       queryFn: async () => {
@@ -43,7 +44,7 @@ export const projectApi = {
 
   getAllProjectsQueryOptions(
     userId: string | undefined,
-    supabaseClient: SupabaseClient = supabase
+    supabaseClient: SupabaseClient<Database> = supabase
   ) {
     return queryOptions({
       queryFn: async () => {

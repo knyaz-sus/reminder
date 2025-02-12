@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox, Search, SquareChartGantt } from "lucide-react";
+import { CircleCheck, Inbox, Search, SquareChartGantt } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -46,6 +46,18 @@ export function SidebarRoutes() {
               <Link href="/app/today" prefetch>
                 <SquareChartGantt />
                 <span>Today</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => setOpenMobile(false)}
+              asChild
+              isActive={pathname === "/app/done"}
+            >
+              <Link href="/app/done">
+                <CircleCheck />
+                <span>Done</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

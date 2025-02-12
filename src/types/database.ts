@@ -64,6 +64,7 @@ export type Database = {
           createdAt: string
           date: string | null
           description: string | null
+          doneAt: string | null
           id: string
           isDone: boolean
           order: number | null
@@ -77,6 +78,7 @@ export type Database = {
           createdAt?: string
           date?: string | null
           description?: string | null
+          doneAt?: string | null
           id?: string
           isDone?: boolean
           order?: number | null
@@ -90,6 +92,7 @@ export type Database = {
           createdAt?: string
           date?: string | null
           description?: string | null
+          doneAt?: string | null
           id?: string
           isDone?: boolean
           order?: number | null
@@ -131,36 +134,6 @@ export type Database = {
           provider?: string | null
         }
         Relationships: []
-      }
-      users_projects: {
-        Row: {
-          projectId: string
-          userId: string
-        }
-        Insert: {
-          projectId?: string
-          userId?: string
-        }
-        Update: {
-          projectId?: string
-          userId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_projects_projectId_fkey"
-            columns: ["projectId"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_projects_userId_fkey"
-            columns: ["userId"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

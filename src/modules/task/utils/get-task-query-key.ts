@@ -6,7 +6,9 @@ export const getTaskQueryKey = (param: string) => {
     return taskApi.getProjectTasksQueryOptions(param).queryKey;
   } else if (param === "today") {
     return taskApi.getTodayTasksQueryOptions().queryKey;
+  } else if (param === "inbox") {
+    return taskApi.getInboxTasksQueryOptions().queryKey;
   } else {
-    return taskApi.getProjectTasksQueryOptions("inbox").queryKey;
+    return taskApi.getDoneTasksQueryOptions().queryKey;
   }
 };

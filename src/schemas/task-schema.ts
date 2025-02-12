@@ -12,6 +12,7 @@ export const taskSchema = z.object({
   createdAt: z.string(),
   adminId: z.string().uuid(),
   order: z.number().int().nullable(),
+  doneAt: z.string().nullable(),
 });
 export const tasksSchema = z.array(taskSchema);
 
@@ -35,6 +36,7 @@ export const updateTaskRequestSchema = z.object({
   projectId: z.string().uuid().optional().nullable(),
   updatedAt: z.string().optional(),
   priority: z.enum(["1", "2", "3", "4"]).optional(),
+  doneAt: z.string().nullable().optional(),
 });
 
 export type Task = z.infer<typeof taskSchema>;

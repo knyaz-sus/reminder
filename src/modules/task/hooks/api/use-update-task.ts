@@ -51,7 +51,9 @@ export const useUpdateTask = (queryKey: string) => {
     mutate(updateProperties);
   };
 
-  const handleDone = (id: string, isDone: boolean) => mutate({ id, isDone });
+  const handleDone = (id: string, isDone: boolean) => {
+    mutate({ id, isDone, doneAt: new Date().toISOString() });
+  };
 
   return { handleUpdate, handleDone, error };
 };

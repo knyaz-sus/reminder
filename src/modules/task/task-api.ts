@@ -10,13 +10,14 @@ import {
 import { SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
 import { validateUUID } from "@/schemas/utils/validate-uuid";
+import { Database } from "@/types/database";
 
 export const taskApi = {
   baseKey: ["tasks"],
 
   getProjectTasksQueryOptions(
     projectId: string,
-    supabaseClient: SupabaseClient = supabase
+    supabaseClient: SupabaseClient<Database> = supabase
   ) {
     return queryOptions({
       queryKey: ["tasks", projectId],
@@ -26,6 +27,7 @@ export const taskApi = {
             .from("tasks")
             .select("*")
             .eq("projectId", projectId)
+            .eq("isDone", false)
             .throwOnError();
 
           return tasksSchema.parse(data);
@@ -37,7 +39,9 @@ export const taskApi = {
     });
   },
 
-  getTodayTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
+  getTodayTasksQueryOptions(
+    supabaseClient: SupabaseClient<Database> = supabase
+  ) {
     return queryOptions({
       queryKey: ["tasks", "today"],
       queryFn: async () => {
@@ -61,16 +65,22 @@ export const taskApi = {
             59,
             999
           ).toISOString();
+
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
+
+          if (!session) {
+            throw Error("Unauthorized error");
+          }
 
           const { data } = await supabaseClient
             .from("tasks")
             .select("*")
             .gte("date", startOfDay)
             .lte("date", endOfDay)
-            .eq("adminId", session?.user.id);
+            .eq("adminId", session?.user.id)
+            .eq("isDone", false);
 
           return tasksSchema.parse(data);
         } catch (error) {
@@ -81,7 +91,9 @@ export const taskApi = {
     });
   },
 
-  getInboxTasksQueryOptions(supabaseClient: SupabaseClient = supabase) {
+  getInboxTasksQueryOptions(
+    supabaseClient: SupabaseClient<Database> = supabase
+  ) {
     return queryOptions({
       queryKey: ["tasks", "inbox"],
       queryFn: async () => {
@@ -89,7 +101,30 @@ export const taskApi = {
           const { data } = await supabaseClient
             .from("tasks")
             .select("*")
+            .eq("isDone", false)
             .is("projectId", null)
+            .throwOnError();
+
+          return tasksSchema.parse(data);
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      },
+    });
+  },
+
+  getDoneTasksQueryOptions(
+    supabaseClient: SupabaseClient<Database> = supabase
+  ) {
+    return queryOptions({
+      queryKey: ["tasks", "done"],
+      queryFn: async () => {
+        try {
+          const { data } = await supabaseClient
+            .from("tasks")
+            .select("*")
+            .eq("isDone", true)
             .throwOnError();
 
           return tasksSchema.parse(data);
