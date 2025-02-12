@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 
 export const signInWithGithub = async () => {
   const origin = (await headers()).get("origin");
-  console.log("origin", origin);
   const supabase = await createServerSupabase();
 
   const { error, data } = await supabase.auth.signInWithOAuth({

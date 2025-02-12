@@ -15,6 +15,7 @@ import { Spinner } from "@/components/spinner";
 
 export default function SignInForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isGitAuthLoading, setIsGitAuthLoading] = useState(false);
   const { register, handleSubmit, formState, reset } = useForm<SingInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
@@ -23,6 +24,14 @@ export default function SignInForm() {
     const error = await signInWithPassword(formData.email, formData.password);
     setSubmitError(error.message);
     reset();
+  };
+  const handleGithubAuth = async () => {
+    try {
+      setIsGitAuthLoading(true);
+      await signInWithGithub();
+    } finally {
+      setIsGitAuthLoading(false);
+    }
   };
   return (
     <div className="rounded-md border border-border w-full max-w-sm p-6">
@@ -34,12 +43,12 @@ export default function SignInForm() {
       >
         <div className="flex justify-between items-center mb-2">
           <h1>Sign in</h1>
-          {formState.isSubmitting && <Spinner />}
+          {(formState.isSubmitting || isGitAuthLoading) && <Spinner />}
         </div>
         <Button
           className="justify-start relative"
           type="button"
-          onClick={signInWithGithub}
+          onClick={handleGithubAuth}
         >
           <GitHubLogoIcon />
           <span className="absolute left-0 right-0 text-center">
