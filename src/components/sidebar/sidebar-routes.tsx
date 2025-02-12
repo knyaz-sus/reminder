@@ -10,9 +10,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./sidebar";
+import { useSidebar } from "@/hooks/use-sidebar";
 
 export function SidebarRoutes() {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
   return (
     <SidebarGroup>
       <SidebarGroupContent>
@@ -24,7 +26,11 @@ export function SidebarRoutes() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/app/inbox"}>
+            <SidebarMenuButton
+              onClick={() => setOpenMobile(false)}
+              asChild
+              isActive={pathname === "/app/inbox"}
+            >
               <Link href="/app/inbox" prefetch>
                 <Inbox />
                 <span>Inbox</span>
@@ -32,7 +38,11 @@ export function SidebarRoutes() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/app/today"}>
+            <SidebarMenuButton
+              onClick={() => setOpenMobile(false)}
+              asChild
+              isActive={pathname === "/app/today"}
+            >
               <Link href="/app/today" prefetch>
                 <SquareChartGantt />
                 <span>Today</span>

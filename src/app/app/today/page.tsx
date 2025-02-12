@@ -1,5 +1,6 @@
 "use client";
 
+import { TasksSkeleton } from "@/components/tasks-skeleton";
 import { CreateTask } from "@/modules/task/components/create-task";
 import { Task } from "@/modules/task/components/task";
 import { useCreateTask } from "@/modules/task/hooks/api/use-create-task";
@@ -19,7 +20,7 @@ export default function TodayPage() {
       <h1 className="mb-4">Today</h1>
       <div className="flex flex-col">
         {isPending ? (
-          <h2>Loading...</h2>
+          <TasksSkeleton />
         ) : (
           <>
             {tasks?.map((task) => (

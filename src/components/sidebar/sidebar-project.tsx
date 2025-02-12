@@ -6,14 +6,17 @@ import { Hash } from "lucide-react";
 import { Project } from "@/schemas/project-schema";
 import { ProjectUpdateDialog } from "@/modules/project/components/project-update-dialog";
 import { usePathname } from "next/navigation";
+import { useSidebar } from "@/hooks/use-sidebar";
 
 export function SidebarProject(project: Project) {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
   return (
     <SidebarMenuButton
       className="hover-parent"
       isActive={pathname === `/app/projects/${project.id}`}
       asChild
+      onClick={() => setOpenMobile(false)}
     >
       <div className="flex justify-between pr-0">
         <Link
