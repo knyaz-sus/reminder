@@ -25,7 +25,7 @@ export function Done() {
       </div>
       {doneTasks.length === 0 && (
         <div className="flex justify-center items-center">
-          <span>You don't have any done tasks</span>
+          <span>You don&apos;t have any done tasks</span>
         </div>
       )}
     </div>
