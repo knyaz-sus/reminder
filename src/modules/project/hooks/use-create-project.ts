@@ -21,11 +21,11 @@ export const useCreateProject = () => {
       });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        projectApi.getAllProjectsQueryOptions().queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         (old = []) => {
           return [
             {
@@ -42,7 +42,7 @@ export const useCreateProject = () => {
     },
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         previousData
       );
       toast({

@@ -7,22 +7,14 @@ import {
 } from "@/components/collapsible";
 import { ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { ProjectCreateDialog } from "@/modules/project/components/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 import { projectApi } from "@/modules/project/project-api";
-import { Projects } from "@/schemas/project-schema";
 
-export function SidebarProjects({
-  projects,
-}: {
-  projects: Projects | undefined;
-}) {
-  const { session } = useAuth();
+export function SidebarProjects() {
   const { data } = useQuery({
-    ...projectApi.getAllProjectsQueryOptions(session?.user.id),
-    initialData: projects,
+    ...projectApi.getAllProjectsQueryOptions(),
     select(data) {
       return data.sort(
         (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))

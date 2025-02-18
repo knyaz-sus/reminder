@@ -43,17 +43,19 @@ export const projectApi = {
   },
 
   getAllProjectsQueryOptions(
-    userId: string | undefined,
     supabaseClient: SupabaseClient<Database> = supabase
   ) {
     return queryOptions({
       queryFn: async () => {
         try {
-          const validatedId = validateUUID(userId);
+          const {
+            data: { session },
+          } = await supabaseClient.auth.getSession();
+          if (!session) throw Error();
           const { data: projects } = await supabaseClient
             .from("projects")
             .select("*")
-            .eq("adminId", validatedId)
+            .eq("adminId", session?.user.id)
             .throwOnError();
 
           return projectsSchema.parse(projects);
@@ -62,7 +64,7 @@ export const projectApi = {
           throw error;
         }
       },
-      queryKey: ["projects", userId],
+      queryKey: ["projects"],
     });
   },
 

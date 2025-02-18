@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { projectApi } from "../project-api";
 import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateProject = () => {
   const { toast } = useToast();
-  const { session } = useAuth();
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
@@ -17,11 +15,11 @@ export const useUpdateProject = () => {
       });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        projectApi.getAllProjectsQueryOptions().queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         (old = []) =>
           old.map((el) => {
             if (el.id === updatedProperties.id) {
@@ -43,7 +41,7 @@ export const useUpdateProject = () => {
 
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         previousData
       );
       toast({

@@ -7,6 +7,8 @@ import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { redirect } from "next/navigation";
 import { projectApi } from "@/modules/project/project-api";
 import { makeQueryClient } from "@/lib/get-query-client";
+import { userApi } from "@/api/user-api";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export async function AppSidebar() {
   const supabase = await createServerSupabase();
@@ -16,23 +18,29 @@ export async function AppSidebar() {
   }
 
   const queryClient = makeQueryClient();
-  const projects = await queryClient.fetchQuery(
-    projectApi.getAllProjectsQueryOptions(
-      session.data.session?.user.id,
-      supabase
-    )
-  );
 
+  await Promise.allSettled([
+    queryClient.prefetchQuery(
+      userApi.getUserQueryOptions(session.data.session?.user.id, supabase)
+    ),
+    queryClient.prefetchQuery(
+      projectApi.getAllProjectsQueryOptions(
+        supabase
+      )
+    ),
+  ]);
   return (
-    <Sidebar>
-      <SidebarUserMenu />
-      <SidebarContent>
-        <SidebarRoutes />
-        <SidebarProjects projects={projects} />
-      </SidebarContent>
-      <SidebarFooter>
-        <ThemeToggle />
-      </SidebarFooter>
-    </Sidebar>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Sidebar>
+        <SidebarUserMenu />
+        <SidebarContent>
+          <SidebarRoutes />
+          <SidebarProjects />
+        </SidebarContent>
+        <SidebarFooter>
+          <ThemeToggle />
+        </SidebarFooter>
+      </Sidebar>
+    </HydrationBoundary>
   );
 }

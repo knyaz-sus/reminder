@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { taskApi } from "@/modules/task/task-api";
 
 export const useQueryProjectTasks = (projectId: string) => {
-  const { data, error } = useQuery({
+  const { data, error } = useSuspenseQuery({
     ...taskApi.getProjectTasksQueryOptions(projectId),
   });
 

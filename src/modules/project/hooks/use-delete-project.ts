@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { DeleteProjectRequest } from "@/schemas/project-schema";
 import { projectApi } from "../project-api";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 
 export const useDeleteProject = () => {
   const { toast } = useToast();
-  const { session } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -21,11 +19,11 @@ export const useDeleteProject = () => {
       });
 
       const previousData = queryClient.getQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey
+        projectApi.getAllProjectsQueryOptions().queryKey
       );
 
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         (old = []) => old.filter((el) => el.id !== vars.id)
       );
 
@@ -33,7 +31,7 @@ export const useDeleteProject = () => {
     },
     onError(_, __, previousData) {
       queryClient.setQueryData(
-        projectApi.getAllProjectsQueryOptions(session?.user.id).queryKey,
+        projectApi.getAllProjectsQueryOptions().queryKey,
         previousData
       );
       toast({
