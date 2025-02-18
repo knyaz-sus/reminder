@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./home-background.module.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef} from "react";
 
 export function Interactive() {
   const mousePos = useRef({ x: 0, y: 0 });
@@ -10,9 +10,13 @@ export function Interactive() {
   const requestId = useRef<number>(null);
 
   useEffect(() => {
+    mousePos.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    updatedPos.current = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
     const move = () => {
       if (!interactiveRef.current) return;
-
       updatedPos.current.x += (mousePos.current.x - updatedPos.current.x) / 20;
       updatedPos.current.y += (mousePos.current.y - updatedPos.current.y) / 20;
 
@@ -35,5 +39,11 @@ export function Interactive() {
     };
   }, []);
 
-  return <div ref={interactiveRef} className={styles.interactive} />;
+  return (
+    <div
+      style={{ transform: "translate(50%, 50%)" }}
+      ref={interactiveRef}
+      className={styles.interactive}
+    />
+  );
 }

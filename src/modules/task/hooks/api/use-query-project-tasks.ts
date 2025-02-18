@@ -14,7 +14,7 @@ export const useQueryProjectTasks = (projectId: string) => {
     if (tasks && dataString !== allDecksString) {
       setTasks(data);
     }
-  }, [data]);
+  }, [data, tasks]);
 
   return {
     tasks: tasks?.sort((a, b) => {
