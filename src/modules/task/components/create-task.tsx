@@ -73,7 +73,7 @@ export function CreateTask({
         />
       </div>
       <Separator />
-      <div className="flex items-center justify-between py-2 gap-2">
+      <div className="flex items-center flex-wrap justify-between py-2 gap-2">
         <div className="flex gap-2">
           <DatePicker controlledDate={date} setControlledDate={setDate} />
           <PrioritySelect priority={priority} onSelectChange={setPriority} />

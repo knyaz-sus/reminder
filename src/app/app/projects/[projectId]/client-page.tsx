@@ -61,7 +61,9 @@ export function ProjectPage() {
     >
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
-          <h1 className="mb-4">{project?.name}</h1>
+          <h1 className="mb-4 overflow-hidden text-ellipsis">
+            {project?.name}
+          </h1>
           <div className="flex flex-col">
             {tasks.map((task) => (
               <Task

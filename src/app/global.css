@@ -23,7 +23,6 @@
     @apply tracking-tight text-3xl font-bold;
   }
   :root {
-    /* for home page background   */
     --color-bg1: rgb(250, 250, 255);
     --color-bg2: rgb(230, 240, 255);
     --color1: 80, 150, 255;

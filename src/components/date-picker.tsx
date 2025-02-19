@@ -43,14 +43,14 @@ export function DatePicker({
         >
           <CalendarIcon />
           {
-            <span>
+            <span className="overflow-hidden text-ellipsis">
               {!date && "Pick a date"}
               {date && !isServer && formatTaskDate(date)}
             </span>
           }
         </Button>
       </PopoverTrigger>
-      <PopoverContent side="right" alignOffset={5} className="w-auto p-0">
+      <PopoverContent side="bottom" alignOffset={5} className="w-auto p-0">
         <Calendar mode="single" selected={date} onSelect={handleDateChange} />
       </PopoverContent>
     </Popover>
