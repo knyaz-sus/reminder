@@ -1,10 +1,12 @@
+import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/badge";
 import { Button } from "@/components/button";
 import { HomeBackground } from "@/components/home-background/home-background";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/variants/button-variants";
 import { cn } from "@/lib/cn";
-import Link from "next/link";
+import { CalendarCheck } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -15,12 +17,8 @@ export default function HomePage() {
       <main className="flex justify-center items-center min-h-svh w-full">
         <HomeBackground />
         <div className="flex flex-col items-center gap-6 text-center max-w-5xl px-4">
-          <img
-            src="https://shadcnblocks.com/images/block/block-1.svg"
-            alt="logo"
-            className="h-16"
-          />
-          <Badge variant="outline">Task manager</Badge>
+          <CalendarCheck size={60} />
+          <Badge>Task manager</Badge>
           <div>
             <h1 className="mb-6 text-pretty text-2xl font-bold lg:text-5xl">
               Build your shedule with minimalistic task manager
@@ -36,59 +34,42 @@ export default function HomePage() {
               Built with open-source technologies
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "group px-3"
-                )}
-              >
-                <img
-                  src="https://shadcnblocks.com/images/block/logos/shadcn-ui-small.svg"
+              <Link href="#" className={cn(buttonVariants(), "group px-3")}>
+                <Image
+                  src="/images/tanstack.svg"
                   alt="company logo"
-                  className="h-6 saturate-0 transition-all group-hover:saturate-100"
+                  className="saturate-0 transition-all group-hover:saturate-100"
+                  width={24}
+                  height={24}
                 />
-              </a>
-              <a
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "group px-3"
-                )}
-              >
-                <img
-                  src="https://shadcnblocks.com/images/block/logos/typescript-small.svg"
+              </Link>
+              <Link href="#" className={cn(buttonVariants(), "group px-3")}>
+                <Image
+                  src="/images/typescript.svg"
                   alt="company logo"
-                  className="h-6 saturate-0 transition-all group-hover:saturate-100"
+                  className="saturate-0 transition-all group-hover:saturate-100"
+                  width={22}
+                  height={22}
                 />
-              </a>
-
-              <a
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "group px-3"
-                )}
-              >
-                <img
-                  src="https://shadcnblocks.com/images/block/logos/react-icon.svg"
+              </Link>
+              <Link href="#" className={cn(buttonVariants(), "group px-3")}>
+                <Image
+                  src="/images/react.svg"
                   alt="company logo"
-                  className="h-6 saturate-0 transition-all group-hover:saturate-100"
+                  className="saturate-0 transition-all group-hover:saturate-100"
+                  width={24}
+                  height={24}
                 />
-              </a>
-              <a
-                href="#"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "group px-3"
-                )}
-              >
-                <img
-                  src="https://shadcnblocks.com/images/block/logos/tailwind-small.svg"
+              </Link>
+              <Link href="#" className={cn(buttonVariants(), "group px-3")}>
+                <Image
+                  src="/images/tailwind.svg"
                   alt="company logo"
-                  className="h-4 saturate-0 transition-all group-hover:saturate-100"
+                  className="saturate-0 transition-all group-hover:saturate-100"
+                  width={24}
+                  height={24}
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
