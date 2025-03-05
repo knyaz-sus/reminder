@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./home-background.module.css";
-import { useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
 export function Interactive() {
   const mousePos = useRef({ x: 0, y: 0 });
@@ -25,16 +25,15 @@ export function Interactive() {
       requestId.current = requestAnimationFrame(move);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
     };
-
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("pointermove", handlePointerMove);
 
     requestId.current = requestAnimationFrame(move);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
       if (requestId.current) cancelAnimationFrame(requestId.current);
     };
   }, []);

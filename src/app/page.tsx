@@ -14,7 +14,7 @@ export default function HomePage() {
       <header className="flex justify-end w-full fixed pl-6 pt-3 pb-3 pr-6">
         <ThemeToggle />
       </header>
-      <main className="flex justify-center items-center min-h-svh w-full">
+      <main className="flex justify-center items-center min-h-svh w-full touch-none">
         <HomeBackground />
         <div className="flex flex-col items-center gap-6 text-center max-w-5xl px-4">
           <CalendarCheck size={60} />
