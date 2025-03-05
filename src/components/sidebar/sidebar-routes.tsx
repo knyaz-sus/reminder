@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CircleCheck, Inbox, Search, SquareChartGantt } from "lucide-react";
 import {
@@ -11,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "./sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
+import { LinkPrefetch } from "../link-prefetch";
 
 export function SidebarRoutes() {
   const pathname = usePathname();
@@ -31,10 +31,10 @@ export function SidebarRoutes() {
               asChild
               isActive={pathname === "/app/inbox"}
             >
-              <Link href="/app/inbox" prefetch>
+              <LinkPrefetch href="/app/inbox">
                 <Inbox />
                 <span>Inbox</span>
-              </Link>
+              </LinkPrefetch>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -43,10 +43,10 @@ export function SidebarRoutes() {
               asChild
               isActive={pathname === "/app/today"}
             >
-              <Link href="/app/today" prefetch>
+              <LinkPrefetch href="/app/today">
                 <SquareChartGantt />
                 <span>Today</span>
-              </Link>
+              </LinkPrefetch>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -55,10 +55,10 @@ export function SidebarRoutes() {
               asChild
               isActive={pathname === "/app/done"}
             >
-              <Link href="/app/done">
+              <LinkPrefetch href="/app/done">
                 <CircleCheck />
                 <span>Done</span>
-              </Link>
+              </LinkPrefetch>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
