@@ -6,14 +6,14 @@ import {
   CollapsibleTrigger,
 } from "@/components/collapsible";
 import { ChevronDown } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ProjectCreateDialog } from "@/modules/project/components/project-create-dialog";
 import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 import { projectApi } from "@/modules/project/project-api";
 
 export function SidebarProjects() {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     ...projectApi.getAllProjectsQueryOptions(),
     select(data) {
       return data.sort(

@@ -25,23 +25,35 @@ import { Ellipsis, PencilLine, Trash2 } from "lucide-react";
 import { useDeleteProject } from "../hooks/use-delete-project";
 import { Project } from "@/schemas/project-schema";
 import { useUpdateProject } from "../hooks/use-update-project";
+import { cn } from "@/lib/cn";
+import { useIsMobile } from "@/hooks/use-is-mobile";
+import { z } from "zod";
 
 export function ProjectUpdateDialog(project: Project) {
+  const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
   const [updateName, setUpdateName] = useState(project.name);
 
   const { handleDelete } = useDeleteProject();
   const { mutate: handleUpdate } = useUpdateProject();
-  
+
   const deleteProject = () => {
     handleDelete({ id: project.id, adminId: project.adminId });
   };
   const updateProject = () => {
+    z.string().nonempty().safeParse(updateName);
     handleUpdate({ id: project.id, name: updateName });
+    setOpen(false);
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
-        <DropdownMenuTrigger className="[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground/80 hover-child">
+        <DropdownMenuTrigger
+          className={cn(
+            "[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground/80",
+            { "hover-child": !isMobile }
+          )}
+        >
           <Ellipsis />
         </DropdownMenuTrigger>
         <DropdownMenuPortal>
@@ -60,25 +72,26 @@ export function ProjectUpdateDialog(project: Project) {
         </DropdownMenuPortal>
       </DropdownMenu>
       <DialogPortal>
-        <DialogContent customClose className="sm:max-w-md">
+        <DialogContent customClose>
           <DialogHeader>
             <DialogTitle>Update project</DialogTitle>
             <DialogDescription>
               Provide please neccesary information.
             </DialogDescription>
-            <div className="flex items-center space-x-2">
-              <div className="grid flex-1 gap-2">
-                <label htmlFor="link" className="sr-only">
-                  Name
-                </label>
-                <Input
-                  id="link"
-                  value={updateName}
-                  onChange={(e) => setUpdateName(e.target.value)}
-                />
-              </div>
-            </div>
           </DialogHeader>
+          <div className="flex items-center">
+            <label htmlFor="name" className="sr-only">
+              Name
+            </label>
+            <Input
+              onKeyDown={(e) => {
+                if (e.key === "Enter") updateProject();
+              }}
+              id="name"
+              value={updateName}
+              onChange={(e) => setUpdateName(e.target.value)}
+            />
+          </div>
           <DialogFooter className="flex w-full gap-1">
             <DialogClose asChild>
               <Button size="sm" variant="secondary">

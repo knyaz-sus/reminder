@@ -2,9 +2,8 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { LogOut } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 import {
   SidebarHeader,
   SidebarMenu,
@@ -16,9 +15,8 @@ import { signOut } from "@/modules/auth/api/sign-out";
 
 export function SidebarUserMenu() {
   const queryClient = useQueryClient();
-  const { session } = useAuth();
   const { data: user } = useQuery({
-    ...userApi.getUserQueryOptions(session?.user.id),
+    ...userApi.getUserQueryOptions(),
   });
   const handleSignOut = () => {
     queryClient.clear();

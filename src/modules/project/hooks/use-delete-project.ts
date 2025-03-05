@@ -40,7 +40,9 @@ export const useDeleteProject = () => {
       });
     },
     onSettled() {
-      queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
+      queryClient.invalidateQueries({
+        queryKey: projectApi.getAllProjectsQueryOptions().queryKey,
+      });
     },
   });
 

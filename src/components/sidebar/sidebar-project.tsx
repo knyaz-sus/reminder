@@ -16,10 +16,10 @@ export function SidebarProject(project: Project) {
       className="hover-parent"
       isActive={pathname === `/app/projects/${project.id}`}
       asChild
-      onClick={() => setOpenMobile(false)}
     >
       <div className="flex justify-between pr-0">
         <LinkPrefetch
+          onClick={() => setOpenMobile(false)}
           className="flex flex-auto items-center max-w-full ml-1 overflow-hidden gap-2 [&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground"
           href={`/app/projects/${project.id}`}
         >

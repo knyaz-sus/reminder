@@ -18,7 +18,7 @@ export const projectApi = {
   baseKey: ["projects"],
 
   getProjectQueryOptions(
-    projectId: string | null,
+    projectId: string,
     supabaseClient: SupabaseClient<Database> = supabase
   ) {
     return queryOptions({
@@ -51,11 +51,11 @@ export const projectApi = {
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
-          if (!session) throw Error();
+          if (!session) throw Error("Auth error");
           const { data: projects } = await supabaseClient
             .from("projects")
             .select("*")
-            .eq("adminId", session?.user.id)
+            .eq("adminId", session.user.id)
             .throwOnError();
 
           return projectsSchema.parse(projects);
@@ -82,11 +82,16 @@ export const projectApi = {
   },
 
   async deleteProject(deleteRequest: DeleteProjectRequest) {
-    const validatedRequest = deleteProjectRequestSchema.parse(deleteRequest);
+    try {
+      const validatedRequest = deleteProjectRequestSchema.parse(deleteRequest);
 
-    await supabase.from("projects").delete().eq("id", validatedRequest.id);
+      await supabase.from("projects").delete().eq("id", validatedRequest.id);
 
-    return { message: "Project deleted succesfully" };
+      return { message: "Project deleted succesfully" };
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   },
 
   async updateProject(updateRequest: UpdateProjectRequest) {
