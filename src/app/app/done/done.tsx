@@ -1,10 +1,15 @@
 "use client";
 
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { PageContainer } from "@/components/page-container";
+import { PageHeader } from "@/components/page-header";
+import { PageFilter } from "@/constants/ui";
 import { DoneTask } from "@/modules/task/components/done-task";
 import { taskApi } from "@/modules/task/task-api";
-import { useQuery } from "@tanstack/react-query";
 
 export function Done() {
+  const [filter, setFilter] = useState<PageFilter>("Date ascending");
   const { data: doneTasks } = useQuery({
     ...taskApi.getDoneTasksQueryOptions(),
     select(data) {
@@ -16,18 +21,21 @@ export function Done() {
   if (!doneTasks) return null;
 
   return (
-    <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
-      <h1 className="mb-4">Done</h1>
-      <div className="flex items-start flex-col">
-        {doneTasks?.map((task) => (
-          <DoneTask key={task.id} {...task} />
-        ))}
-      </div>
-      {doneTasks.length === 0 && (
-        <div className="flex justify-center items-center">
-          <span>You don&apos;t have any done tasks</span>
+    <>
+      <PageHeader filter={filter} setFilter={setFilter} />
+      <PageContainer>
+        <h1 className="mb-4">Done</h1>
+        <div className="flex items-start flex-col">
+          {doneTasks?.map((task) => (
+            <DoneTask key={task.id} {...task} />
+          ))}
         </div>
-      )}
-    </div>
+        {doneTasks.length === 0 && (
+          <div className="flex justify-center items-center">
+            <span>You don&apos;t have any done tasks</span>
+          </div>
+        )}
+      </PageContainer>
+    </>
   );
 }

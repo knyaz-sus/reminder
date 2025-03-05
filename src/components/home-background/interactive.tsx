@@ -30,7 +30,7 @@ export function Interactive() {
     };
     window.addEventListener("pointermove", handlePointerMove);
 
-    requestId.current = requestAnimationFrame(move);
+    move();
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);

@@ -6,6 +6,7 @@ import { Providers } from "@/context/providers";
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin", "cyrillic"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {

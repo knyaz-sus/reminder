@@ -1,6 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQueryProjectTasks } from "@/modules/task/hooks/api/use-query-project-tasks";
 import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
 import { useUpdateTaskOrder } from "@/modules/task/hooks/api/use-update-task-order";
@@ -16,22 +17,24 @@ import { Task } from "@/modules/task/components/task";
 import { useParams } from "next/navigation";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { projectApi } from "@/modules/project/project-api";
+import { PageHeader } from "@/components/page-header";
+import { PageContainer } from "@/components/page-container";
+import { PageFilter } from "@/constants/ui";
 
 export function ProjectPage() {
+  const [filter, setFilter] = useState<PageFilter>("User preference");
   const { projectId } = useParams<{ projectId: string }>();
   const sensors = useTaskSensors();
 
-  const { data: project } = useQuery({
+  const { data: project } = useSuspenseQuery({
     ...projectApi.getProjectQueryOptions(projectId),
   });
 
-  const { tasks, setTasks } = useQueryProjectTasks(projectId);
+  const { tasks, setTasks } = useQueryProjectTasks(projectId, filter);
 
   const { mutate: handleUpdateOrder } = useUpdateTaskOrder(projectId);
 
   const { mutate: handleCreate } = useCreateTask(projectId);
-
-  if (!tasks) return <div>Loading...</div>;
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -60,14 +63,15 @@ export function ProjectPage() {
       modifiers={[restrictToWindowEdges]}
     >
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-        <div className="flex flex-col flex-auto max-w-[85vw] lg:max-w-3xl">
+        <PageHeader filter={filter} setFilter={setFilter} />
+        <PageContainer>
           <h1 className="mb-4 overflow-hidden text-ellipsis">
             {project?.name}
           </h1>
           <div className="flex flex-col">
             {tasks.map((task) => (
               <Task
-                isSortable
+                isSortable={filter === "User preference"}
                 param={task.projectId as string}
                 key={task.id}
                 {...task}
@@ -79,7 +83,7 @@ export function ProjectPage() {
               order={tasks.length + 1}
             />
           </div>
-        </div>
+        </PageContainer>
       </SortableContext>
     </DndContext>
   );
