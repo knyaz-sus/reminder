@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UpdateTaskRequest } from "@/schemas/task-schema";
-import { taskApi } from "../../task-api";
+import { taskApi } from "@/modules/task/task-api";
 import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateTask = (queryKey: string) => {

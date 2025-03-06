@@ -47,7 +47,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
       })}
       aria-describedby=""
     >
-      {isMobile && (
+      {isMobile && props.isSortable && (
         <GripVertical
           {...attributes}
           {...listeners}
