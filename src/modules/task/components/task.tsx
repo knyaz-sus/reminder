@@ -42,17 +42,16 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
       {...(!isMobile && { ...attributes, ...listeners })}
       style={style}
       ref={setNodeRef}
-      className={cn(
-        "flex flex-col gap-2 mb-2 bg-background touch-none relative",
-        { "touch-none": !isMobile }
-      )}
+      className={cn("flex flex-col gap-2 mb-2 bg-background relative", {
+        "touch-none": !isMobile,
+      })}
       aria-describedby=""
     >
       {isMobile && (
         <GripVertical
           {...attributes}
           {...listeners}
-          className="absolute top-[0.3rem] -left-6"
+          className="absolute top-[0.3rem] -left-6 touch-none"
           size={18}
         />
       )}
