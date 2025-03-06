@@ -1,18 +1,16 @@
 "use client";
 
-import { PropsWithChildren, useState } from "react";
-import Link from "next/link";
+import { HTMLAttributes, useState } from "react";
+import Link, { LinkProps } from "next/link";
 
-export function LinkPrefetch({
-  onClick,
-  className,
-  href,
-  children,
-}: PropsWithChildren<{
-  className?: string;
-  href: string;
-  onClick?: () => void;
-}>) {
+export function LinkPrefetch(
+  props: LinkProps &
+    HTMLAttributes<HTMLAnchorElement> & {
+      className?: string;
+      href: string;
+      onClick?: () => void;
+    }
+) {
   const [shouldPrefetch, setShouldPrefetch] = useState<null | true>(null);
 
   const handleHover = () => {
@@ -20,14 +18,8 @@ export function LinkPrefetch({
   };
 
   return (
-    <Link
-      prefetch={shouldPrefetch}
-      onPointerEnter={handleHover}
-      className={className}
-      href={href}
-      onClick={onClick}
-    >
-      {children}
+    <Link prefetch={shouldPrefetch} onPointerEnter={handleHover} {...props}>
+      {props.children}
     </Link>
   );
 }

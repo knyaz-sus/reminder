@@ -2,21 +2,24 @@
 
 import { useState } from "react";
 import { Separator } from "@/components/separator";
-import { Calendar } from "lucide-react";
+import { Calendar, GripVertical } from "lucide-react";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
-import { useUpdateTask } from "../hooks/api/use-update-task";
+import { useUpdateTask } from "@/modules/task/hooks/api/use-update-task";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
 import { StaticEditor } from "@/components/editor/static-editor";
 import { useIsServer } from "@/hooks/use-is-server";
-import { formatTaskDate } from "../utils/format-task-date";
+import { formatTaskDate } from "@/modules/task/utils/format-task-date";
+import { useIsMobile } from "@/hooks/use-is-mobile";
+import { cn } from "@/lib/cn";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
   const { handleDone } = useUpdateTask(props.param);
   const isServer = useIsServer();
+  const isMobile = useIsMobile();
   const {
     attributes,
     listeners,
@@ -36,13 +39,23 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   };
   return (
     <div
-      {...attributes}
-      {...listeners}
-      ref={setNodeRef}
+      {...(!isMobile && { ...attributes, ...listeners })}
       style={style}
-      className="flex flex-col gap-2 mb-2 bg-background touch-none"
+      ref={setNodeRef}
+      className={cn(
+        "flex flex-col gap-2 mb-2 bg-background touch-none relative",
+        { "touch-none": !isMobile }
+      )}
       aria-describedby=""
     >
+      {isMobile && (
+        <GripVertical
+          {...attributes}
+          {...listeners}
+          className="absolute top-[0.3rem] -left-6"
+          size={18}
+        />
+      )}
       <div className="flex cursor-pointer group flex-col">
         <div className="flex items-start w-full py-1 gap-2">
           <TaskCheck

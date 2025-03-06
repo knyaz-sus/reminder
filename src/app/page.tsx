@@ -25,7 +25,7 @@ export default function HomePage() {
             </h1>
           </div>
           <div className="mt-4 flex justify-center gap-2">
-            <Button>
+            <Button asChild>
               <Link href="/auth/signin">Get Started Now</Link>
             </Button>
           </div>

@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { CircleCheck, Inbox, Search, SquareChartGantt } from "lucide-react";
+import { useSidebar } from "@/hooks/use-sidebar";
+import { LinkPrefetch } from "@/components/link-prefetch";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -9,8 +11,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./sidebar";
-import { useSidebar } from "@/hooks/use-sidebar";
-import { LinkPrefetch } from "../link-prefetch";
 
 export function SidebarRoutes() {
   const pathname = usePathname();
