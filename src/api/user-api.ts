@@ -13,7 +13,7 @@ export const userApi = {
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
-          if (!session) throw new Error("Auth error");
+          if (!session) throw new Error("Auth error while getting user");
 
           const { data } = await supabaseClient
             .from("users")

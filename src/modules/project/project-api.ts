@@ -51,7 +51,7 @@ export const projectApi = {
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
-          if (!session) throw Error("Auth error");
+          if (!session) throw Error("Auth error while getting projects");
           const { data: projects } = await supabaseClient
             .from("projects")
             .select("*")

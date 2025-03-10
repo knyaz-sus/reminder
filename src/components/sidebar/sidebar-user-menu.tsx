@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { LogOut } from "lucide-react";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import {
   SidebarHeader,
@@ -12,15 +13,21 @@ import {
   SidebarTrigger,
 } from "./sidebar";
 import { signOut } from "@/modules/auth/api/sign-out";
+import { Spinner } from "@/components/spinner";
 
 export function SidebarUserMenu() {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const queryClient = useQueryClient();
-  const { data: user } = useQuery({
-    ...userApi.getUserQueryOptions(),
-  });
-  const handleSignOut = () => {
-    queryClient.clear();
-    signOut();
+  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const handleSignOut = async () => {
+    try {
+      setIsLoggingOut(true);
+      await signOut();
+    } catch {
+      setIsLoggingOut(false);
+    } finally {
+      queryClient.clear();
+    }
   };
   return (
     <SidebarHeader>
@@ -38,8 +45,8 @@ export function SidebarUserMenu() {
         </SidebarMenuItem>
         <div className="flex">
           <SidebarMenuItem>
-            <SidebarMenuButton size="sm">
-              <LogOut onClick={handleSignOut} />
+            <SidebarMenuButton onClick={handleSignOut} size="sm">
+              {isLoggingOut ? <Spinner /> : <LogOut />}
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
