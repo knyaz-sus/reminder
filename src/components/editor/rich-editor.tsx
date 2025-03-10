@@ -5,7 +5,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { BubbleMenuEditor } from "./bubble-menu-editor";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Underline } from "@tiptap/extension-underline";
-import { useEffect } from "react";
 
 interface RichEditorProps {
   content?: string;
@@ -14,7 +13,7 @@ interface RichEditorProps {
   autofocus?: FocusPosition;
 }
 
-export function RichEditor({
+export default function RichEditor({
   handleSave,
   content,
   placeholder,
@@ -27,21 +26,15 @@ export function RichEditor({
       handleSave(editor.editor.getHTML());
     },
     autofocus,
-    immediatelyRender: false,
     editorProps: { attributes: { spellcheck: "false" } },
   });
-  useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content || "");
-    }
-    if (placeholder === "Provide title...") editor?.commands.focus();
-  }, [content, editor, placeholder]);
 
-  if (!editor) return null;
-  return (
+  return editor ? (
     <div>
       <EditorContent editor={editor} className="text-sm" />
       <BubbleMenuEditor editor={editor} />
     </div>
+  ) : (
+    <div className="placeholder min-h-[20px] text-sm">Loading editor...</div>
   );
 }

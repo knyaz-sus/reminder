@@ -143,7 +143,13 @@
   height: 0;
   pointer-events: none;
 }
-
+.placeholder {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
 div.ProseMirror-focused {
   outline: none;
   border: none;

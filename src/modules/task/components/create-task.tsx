@@ -4,13 +4,23 @@ import { useState } from "react";
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { Separator } from "@/components/separator";
-import { RichEditor } from "@/components/editor/rich-editor";
 import { PrioritySelect } from "./priority-select";
 import { Priorities } from "@/constants/ui";
 import { Plus } from "lucide-react";
 import { useCreateState } from "../hooks/use-create-state";
 import { CreateTaskRequest } from "@/schemas/task-schema";
 import { v4 as uuid } from "uuid";
+import dynamic from "next/dynamic";
+
+const DynamicRichTextEditor = dynamic(
+  () => import("@/components/editor/rich-editor"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="placeholder min-h-[20px] text-sm">Loading editor...</div>
+    ),
+  }
+);
 
 interface CreateTaskProps {
   projectId: string | null;
@@ -59,13 +69,13 @@ export function CreateTask({
                  border-border border rounded-md"
     >
       <div className="flex flex-col gap-1 mb-1">
-        <RichEditor
+        <DynamicRichTextEditor
           content={title}
           handleSave={setTitle}
           autofocus="end"
           placeholder="Provide title..."
         />
-        <RichEditor
+        <DynamicRichTextEditor
           content={description}
           handleSave={setDescription}
           autofocus={false}

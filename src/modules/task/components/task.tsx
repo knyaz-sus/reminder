@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { Separator } from "@/components/separator";
 import { Calendar, GripVertical } from "lucide-react";
-import { UpdateTaskModal } from "./update-task-dialog";
 import { TaskCheck } from "./task-check";
 import { useUpdateTask } from "@/modules/task/hooks/api/use-update-task";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task as TaskType } from "@/schemas/task-schema";
-import { StaticEditor } from "@/components/editor/static-editor";
 import { useIsServer } from "@/hooks/use-is-server";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/lib/cn";
+import sanitizeHtml from "sanitize-html";
+import { UpdateTaskModal } from "./update-task-dialog";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
@@ -65,13 +65,23 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
           />
           <div
             onClick={() => setOpen(true)}
-            className="flex flex-col gap-1 w-full "
+            className="flex flex-col gap-1 w-full"
           >
-            <StaticEditor content={props.title} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(props.title, {
+                  allowedTags: ["b", "i", "em", "strong", "p", "u"],
+                }),
+              }}
+            />
             {!!props.description && props.description !== "<p></p>" && (
-              <StaticEditor
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(props.description, {
+                    allowedTags: ["b", "i", "em", "strong", "p", "u"],
+                  }),
+                }}
                 className="text-xs text-foreground/80"
-                content={props.description ? props.description : undefined}
               />
             )}
             {!!props.date && props.param !== "today" && (

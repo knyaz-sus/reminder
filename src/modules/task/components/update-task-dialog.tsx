@@ -1,12 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
-import { RichEditor } from "@/components/editor/rich-editor";
 import { Separator } from "@/components/separator";
 import { Plus, Trash2, X } from "lucide-react";
-import { useState } from "react";
-import { PrioritySelect } from "./priority-select";
 import {
   Dialog,
   DialogClose,
@@ -15,11 +13,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/dialog";
-
 import { TaskCheck } from "./task-check";
 import { Task } from "@/schemas/task-schema";
-import { useDeleteTask } from "../hooks/api/use-delete-task";
-import { useUpdateTask } from "../hooks/api/use-update-task";
+import { useDeleteTask } from "@/modules/task/hooks/api/use-delete-task";
+import { useUpdateTask } from "@/modules/task/hooks/api/use-update-task";
+import dynamic from "next/dynamic";
+import { PrioritySelect } from "./priority-select";
+
+const DynamicRichTextEditor = dynamic(
+  () => import("@/components/editor/rich-editor"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="placeholder min-h-[20px] text-sm">Loading editor...</div>
+    ),
+  }
+);
 
 type UpdateTaskModalProps = {
   open: boolean;
@@ -88,13 +97,13 @@ export function UpdateTaskModal({
                 isDone={isDone}
               />
               <div className="flex flex-col gap-1 mb-2">
-                <RichEditor
+                <DynamicRichTextEditor
                   content={title}
                   handleSave={setUpdatedTitle}
                   autofocus="end"
                   placeholder="Provide title..."
                 />
-                <RichEditor
+                <DynamicRichTextEditor
                   content={description ? description : undefined}
                   handleSave={setUpdatedDescription}
                   autofocus={false}
@@ -128,7 +137,7 @@ export function UpdateTaskModal({
               />
             </div>
             <Button size="sm" onClick={updateTask}>
-              Save changes
+              Save
             </Button>
           </div>
         </div>
