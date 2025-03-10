@@ -12,8 +12,8 @@ import { useIsServer } from "@/hooks/use-is-server";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/lib/cn";
-import sanitizeHtml from "sanitize-html";
 import { UpdateTaskModal } from "./update-task-dialog";
+import { StaticEditor } from "@/components/editor/static-editor";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
@@ -67,20 +67,10 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
             onClick={() => setOpen(true)}
             className="flex flex-col gap-1 w-full"
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(props.title, {
-                  allowedTags: ["b", "i", "em", "strong", "p", "u"],
-                }),
-              }}
-            />
+            <StaticEditor dangerousString={props.title} />
             {!!props.description && props.description !== "<p></p>" && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(props.description, {
-                    allowedTags: ["b", "i", "em", "strong", "p", "u"],
-                  }),
-                }}
+              <StaticEditor
+                dangerousString={props.description}
                 className="text-xs text-foreground/80"
               />
             )}
