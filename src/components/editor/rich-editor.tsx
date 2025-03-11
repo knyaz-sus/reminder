@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useEditor, EditorContent, FocusPosition } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { BubbleMenuEditor } from "./bubble-menu-editor";
@@ -28,6 +29,11 @@ export default function RichEditor({
     autofocus,
     editorProps: { attributes: { spellcheck: "false" } },
   });
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "");
+    }
+  }, [content, editor, placeholder]);
 
   return editor ? (
     <div>
