@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/button";
 import { SingUpSchema, singUpSchema } from "@/modules/auth/schemas";
-import { FormField } from "@/modules/auth/components/form-field";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpWithPassword } from "@/modules/auth/api/sign-up-with-password";
-import Link from "next/link";
 import { ErrorMessage } from "@/components/error-message";
 import { Spinner } from "@/components/spinner";
+import { Input } from "@/components/input";
 
 export default function SignUpForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -35,22 +35,51 @@ export default function SignUpForm() {
           {formState.isSubmitting && <Spinner />}
         </div>
         <div className="flex flex-col gap-3 mb-2">
-          <FormField
-            register={register}
-            error={formState.errors.name?.message}
-            name="name"
-          />
-          <FormField
-            register={register}
-            error={formState.errors.email?.message}
-            name="email"
-          />
-          <FormField
-            register={register}
-            error={formState.errors.password?.message}
-            name="password"
-            type="password"
-          />
+          <div>
+            <label className="text-sm p-1" htmlFor="name">
+              Name
+            </label>
+            <Input
+              {...register("name")}
+              type="text"
+              placeholder="Enter your name"
+              id="name"
+              autoComplete="name"
+            />
+            {formState.errors.name && (
+              <ErrorMessage>{formState.errors.name.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label className="text-sm p-1" htmlFor="email">
+              Email
+            </label>
+            <Input
+              {...register("email")}
+              type="text"
+              placeholder="Enter your email"
+              id="email"
+              autoComplete="email"
+            />
+            {formState.errors.email && (
+              <ErrorMessage>{formState.errors.email.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label className="text-sm p-1" htmlFor="password">
+              Password
+            </label>
+            <Input
+              {...register("password")}
+              type="password"
+              placeholder="Enter your password"
+              id="password"
+              autoComplete="password"
+            />
+            {formState.errors.password && (
+              <ErrorMessage>{formState.errors.password.message}</ErrorMessage>
+            )}
+          </div>
         </div>
         <Button type="submit">Sign up</Button>
       </form>

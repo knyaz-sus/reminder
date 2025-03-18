@@ -7,7 +7,6 @@ export function StaticEditor(
 ) {
   return (
     <div
-      {...props}
       dangerouslySetInnerHTML={{
         __html: sanitizeHtml(props.dangerousString, {
           allowedTags: ["b", "i", "em", "strong", "p", "u"],

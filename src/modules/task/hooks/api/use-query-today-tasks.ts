@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { taskApi } from "@/modules/task/task-api";
 import { PageFilter } from "@/constants/ui";
-import { filterTasks } from "../../utils/filter-tasks";
+import { filterTasks } from "@/modules/task/utils/filter-tasks";
 
 export const useQueryTodayTasks = (filter: PageFilter) => {
   const {

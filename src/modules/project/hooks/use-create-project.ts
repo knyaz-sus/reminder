@@ -1,15 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
 import { CreateProjectRequest } from "@/schemas/project-schema";
-import { projectApi } from "../project-api";
-import { MakeOptional } from "@/types";
+import { projectApi } from "@/modules/project/project-api";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase/create-browser-supabase";
 
 export const useCreateProject = () => {
   const { toast } = useToast();
   const router = useRouter();
-  const { session } = useAuth();
 
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation({
@@ -23,6 +21,11 @@ export const useCreateProject = () => {
       const previousData = queryClient.getQueryData(
         projectApi.getAllProjectsQueryOptions().queryKey
       );
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) return previousData;
 
       queryClient.setQueryData(
         projectApi.getAllProjectsQueryOptions().queryKey,
@@ -30,6 +33,7 @@ export const useCreateProject = () => {
           return [
             {
               ...newProject,
+              adminId: session?.user.id,
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
             },
@@ -56,14 +60,8 @@ export const useCreateProject = () => {
     },
   });
 
-  const handleCreate = async (
-    createRequest: MakeOptional<CreateProjectRequest, "adminId">
-  ) => {
-    if (session)
-      mutate({
-        ...createRequest,
-        adminId: session?.user.id,
-      });
+  const handleCreate = async (createRequest: CreateProjectRequest) => {
+    mutate(createRequest);
   };
 
   return { handleCreate, error };

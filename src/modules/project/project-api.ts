@@ -51,7 +51,9 @@ export const projectApi = {
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
-          if (!session) throw Error("Auth error while getting projects");
+          if (!session) {
+            throw Error("Auth error while getting projects");
+          }
           const { data: projects } = await supabaseClient
             .from("projects")
             .select("*")
@@ -70,10 +72,15 @@ export const projectApi = {
 
   async createProject(projectRequest: CreateProjectRequest) {
     createProjectRequestSchema.parse(projectRequest);
-
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      throw Error("Auth error while creating projects");
+    }
     const { data } = await supabase
       .from("projects")
-      .insert(projectRequest)
+      .insert({ ...projectRequest, adminId: session?.user.id })
       .select("*")
       .single()
       .throwOnError();

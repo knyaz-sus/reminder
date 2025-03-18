@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { CircleCheck, Inbox, Search, SquareChartGantt } from "lucide-react";
+import { CircleCheck, Inbox, SquareChartGantt } from "lucide-react";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { LinkPrefetch } from "@/components/link-prefetch";
 import {
@@ -19,12 +19,6 @@ export function SidebarRoutes() {
     <SidebarGroup>
       <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Search />
-              <span>Search</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => setOpenMobile(false)}

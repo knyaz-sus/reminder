@@ -2,6 +2,12 @@ import { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { SidebarProvider } from "@/context/sidebar-provider";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reminder",
+  description: "Task manager application",
+};
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();

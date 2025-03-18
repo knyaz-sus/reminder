@@ -6,7 +6,7 @@ import { Task } from "@/schemas/task-schema";
 import { stripHtmlTags } from "@/modules/task/utils/remove-tags";
 import { useIsServer } from "@/hooks/use-is-server";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { UpdateTaskModal } from "./update-task-dialog";
@@ -14,7 +14,7 @@ import { UpdateTaskModal } from "./update-task-dialog";
 export function DoneTask(props: Task) {
   const [open, setOpen] = useState(false);
   const isServer = useIsServer();
-  const { data: user } = useSuspenseQuery({
+  const { data: user } = useQuery({
     ...userApi.getUserQueryOptions(),
   });
 

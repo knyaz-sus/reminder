@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useQueryProjectTasks } from "@/modules/task/hooks/api/use-query-project-tasks";
 import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
 import { useUpdateTaskOrder } from "@/modules/task/hooks/api/use-update-task-order";
@@ -26,7 +26,7 @@ export function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const sensors = useTaskSensors();
 
-  const { data: project } = useSuspenseQuery({
+  const { data: project } = useQuery({
     ...projectApi.getProjectQueryOptions(projectId),
   });
 
@@ -36,6 +36,8 @@ export function ProjectPage() {
 
   const { mutate: handleCreate } = useCreateTask(projectId);
 
+  if (!tasks) return null;
+  
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (!over) return;

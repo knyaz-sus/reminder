@@ -4,6 +4,12 @@ import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { taskApi } from "@/modules/task/task-api";
 import { projectApi } from "@/modules/project/project-api";
 import { makeQueryClient } from "@/lib/get-query-client";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Reminder",
+  description: "Task manager application",
+};
 
 export default async function Project({
   params,
@@ -26,7 +32,7 @@ export default async function Project({
 
   if (queries[0].status !== "fulfilled" || queries[1].status !== "fulfilled") {
     return (
-      <div className="flex flex-col justify-center items-center min-h-svh">
+      <div className="flex flex-col justify-center items-center min-h-svh w-full">
         <h2>Something went wrong!</h2>
       </div>
     );

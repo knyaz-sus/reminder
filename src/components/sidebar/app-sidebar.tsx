@@ -1,34 +1,27 @@
+import { Suspense } from "react";
 import { Sidebar, SidebarContent, SidebarFooter } from "./sidebar";
-import { SidebarProjects } from "./sidebar-projects";
 import { SidebarRoutes } from "./sidebar-routes";
-import { SidebarUserMenu } from "./sidebar-user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
-import { projectApi } from "@/modules/project/project-api";
-import { makeQueryClient } from "@/lib/get-query-client";
-import { userApi } from "@/api/user-api";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { SidebarUserStreaming } from "./sidebar-user-streaming";
+import { SidebarProjectsStreaming } from "./sidebar-projects-streaming";
+import { SidebarUserMenuSkeleton } from "./sidebar-user-menu-skeleton";
+import { SidebarProjectsSkeleton } from "./sidebar-projects-skeleton";
 
 export async function AppSidebar() {
-  const supabase = await createServerSupabase();
-  const queryClient = makeQueryClient();
-
-  await Promise.allSettled([
-    queryClient.prefetchQuery(userApi.getUserQueryOptions(supabase)),
-    queryClient.prefetchQuery(projectApi.getAllProjectsQueryOptions(supabase)),
-  ]);
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Sidebar>
-        <SidebarUserMenu />
-        <SidebarContent>
-          <SidebarRoutes />
-          <SidebarProjects />
-        </SidebarContent>
-        <SidebarFooter>
-          <ThemeToggle />
-        </SidebarFooter>
-      </Sidebar>
-    </HydrationBoundary>
+    <Sidebar>
+      <Suspense fallback={<SidebarUserMenuSkeleton />}>
+        <SidebarUserStreaming />
+      </Suspense>
+      <SidebarContent>
+        <SidebarRoutes />
+        <Suspense fallback={<SidebarProjectsSkeleton />}>
+          <SidebarProjectsStreaming />
+        </Suspense>
+      </SidebarContent>
+      <SidebarFooter>
+        <ThemeToggle />
+      </SidebarFooter>
+    </Sidebar>
   );
 }

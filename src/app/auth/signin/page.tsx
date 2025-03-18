@@ -1,17 +1,17 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/button";
 import { signInSchema, SingInSchema } from "@/modules/auth/schemas";
 import { signInWithPassword } from "@/modules/auth/api/sign-in-with-password";
 import { signInWithGithub } from "@/modules/auth/api/sign-in-with-github";
-import { FormField } from "@/modules/auth/components/form-field";
-import { useState } from "react";
 import { ErrorMessage } from "@/components/error-message";
-import Link from "next/link";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Spinner } from "@/components/spinner";
+import { Input } from "@/components/input";
 
 export default function SignInForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -56,17 +56,36 @@ export default function SignInForm() {
           </span>
         </Button>
         <div className="flex flex-col gap-3 mb-2">
-          <FormField
-            register={register}
-            error={formState.errors.email?.message}
-            name="email"
-          />
-          <FormField
-            register={register}
-            error={formState.errors.password?.message}
-            name="password"
-            type="password"
-          />
+          <div>
+            <label className="text-sm p-1" htmlFor="email">
+              Email
+            </label>
+            <Input
+              {...register("email")}
+              type="text"
+              placeholder="Enter your email"
+              id="email"
+              autoComplete="email"
+            />
+            {formState.errors.email && (
+              <ErrorMessage>{formState.errors.email.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label className="text-sm p-1" htmlFor="password">
+              Password
+            </label>
+            <Input
+              {...register("password")}
+              type="password"
+              placeholder="Enter your password"
+              id="password"
+              autoComplete="password"
+            />
+            {formState.errors.password && (
+              <ErrorMessage>{formState.errors.password.message}</ErrorMessage>
+            )}
+          </div>
         </div>
         <Button type="submit">Sign in with password</Button>
       </form>
