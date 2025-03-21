@@ -1,17 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "mjhoedbqqtdajctqrurl.supabase.co",
+        port: "",
+      },
+    ],
+  },
   async redirects() {
     return [
       {
         source: "/app",
         destination: "/app/today",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/auth",
         destination: "/auth/signin",
-        permanent: false,
+        permanent: true,
       },
     ];
   },

@@ -7,7 +7,7 @@ import { SidebarProjectsStreaming } from "./sidebar-projects-streaming";
 import { SidebarUserMenuSkeleton } from "./sidebar-user-menu-skeleton";
 import { SidebarProjectsSkeleton } from "./sidebar-projects-skeleton";
 
-export async function AppSidebar() {
+export function AppSidebar() {
   return (
     <Sidebar>
       <Suspense fallback={<SidebarUserMenuSkeleton />}>

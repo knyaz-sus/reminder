@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Priorities } from "@/constants/ui";
-import { useAuth } from "@/modules/auth/hooks/use-auth";
-import { taskApi } from "../../task-api";
+import { taskApi } from "@/modules/task/task-api";
 import { useToast } from "@/hooks/use-toast";
-import { getTaskQueryKey } from "../../utils/get-task-query-key";
+import { getTaskQueryKey } from "@/modules/task/utils/get-task-query-key";
+import { supabase } from "@/lib/supabase/create-browser-supabase";
 
 export const useCreateTask = (param: string) => {
   const { toast } = useToast();
-  const { session } = useAuth();
 
   const queryKey = getTaskQueryKey(param);
 
@@ -18,6 +17,9 @@ export const useCreateTask = (param: string) => {
     async onMutate(newTask) {
       await queryClient.cancelQueries({ queryKey: taskApi.baseKey });
 
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       const previousData = queryClient.getQueryData(queryKey);

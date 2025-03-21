@@ -6,7 +6,6 @@ import {
   isServer,
 } from "@tanstack/react-query";
 import { ReactNode } from "react";
-import { UserProvider } from "@/context/user-provider";
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "@/components/toaster";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -36,17 +35,15 @@ export function Providers({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
-      </UserProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+        <Toaster />
+      </ThemeProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

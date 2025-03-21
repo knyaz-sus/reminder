@@ -10,19 +10,28 @@ import { useQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { UpdateTaskModal } from "./update-task-dialog";
+import { useAvatar } from "@/hooks/use-avatar";
 
 export function DoneTask(props: Task) {
   const [open, setOpen] = useState(false);
   const isServer = useIsServer();
-  const { data: user } = useQuery({
-    ...userApi.getUserQueryOptions(),
-  });
+  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const { avatarUrl } = useAvatar();
 
   return (
     <div className="flex text-sm flex-col items-start gap-2 mb-2 bg-background w-full">
       <div className="flex gap-2">
         <Avatar className="h-10 w-10">
-          <AvatarImage />
+          {avatarUrl && (
+            <AvatarImage
+              src={avatarUrl}
+              alt="User avatar"
+              width={40}
+              height={40}
+              asChild
+              className="w-10 h-10 aspect-square object-cover"
+            />
+          )}
           <AvatarFallback className="bg-secondary text text-secondary-foreground p-1 rounded-full">
             {user?.name?.substring(0, 2).toUpperCase()}
           </AvatarFallback>

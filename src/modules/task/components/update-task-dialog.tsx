@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/date-picker";
 import { Separator } from "@/components/separator";
@@ -17,8 +18,8 @@ import { TaskCheck } from "./task-check";
 import { Task } from "@/schemas/task-schema";
 import { useDeleteTask } from "@/modules/task/hooks/api/use-delete-task";
 import { useUpdateTask } from "@/modules/task/hooks/api/use-update-task";
-import dynamic from "next/dynamic";
 import { PrioritySelect } from "./priority-select";
+import { ProjectsDropdown } from "./projects-dropdown";
 
 const DynamicRichTextEditor = dynamic(
   () => import("@/components/editor/rich-editor"),
@@ -44,6 +45,7 @@ export function UpdateTaskModal({
   description,
   date,
   priority,
+  projectId,
   isDone,
   param,
 }: UpdateTaskModalProps) {
@@ -76,6 +78,7 @@ export function UpdateTaskModal({
         customClose
       >
         <DialogHeader className="flex items-center flex-row py-2 pr-3 pl-2">
+          <ProjectsDropdown taskId={id} projectId={projectId} />
           <div className="flex w-full justify-end gap-2">
             <Button variant="ghost" size="xs" onClick={deleteTask}>
               <Trash2 />
