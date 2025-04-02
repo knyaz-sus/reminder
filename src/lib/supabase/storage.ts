@@ -5,5 +5,5 @@ export function getAvatarSrc(userId: string | undefined) {
   const { data } = supabase.storage
     .from("task-manager")
     .getPublicUrl(`${userId}/avatar`);
-  return data.publicUrl + "?version=" + Math.random();
+  return data.publicUrl + "?version=" + Date.now();
 }
