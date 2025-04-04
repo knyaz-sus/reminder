@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Settings } from "lucide-react";
 import {
   SidebarHeader,
   SidebarMenu,
@@ -6,7 +8,6 @@ import {
   SidebarTrigger,
 } from "./sidebar";
 import { SidebarAvatar } from "./sidebar-avatar";
-import { SidebarLogOutButton } from "./sidebar-logout-button";
 
 export function SidebarUserMenu() {
   return (
@@ -14,7 +15,16 @@ export function SidebarUserMenu() {
       <SidebarMenu className="flex-row justify-between items-center">
         <SidebarAvatar />
         <div className="flex">
-          <SidebarLogOutButton />
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild size="sm">
+              <Link
+                scroll={false}
+                href={{ pathname: "/app/settings", query: { modal: true } }}
+              >
+                <Settings />
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="sm">
               <SidebarTrigger />

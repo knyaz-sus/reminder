@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { getAvatarSrc } from "@/lib/supabase/storage";
-import { Session } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/create-browser-supabase";
 
 interface IUserAvatarContext {
   avatarUrl: string | undefined;
@@ -22,16 +22,20 @@ export const UserAvatarContext = createContext<IUserAvatarContext>({
 
 export function UserAvatarContextProvider({
   children,
-  initialSession,
 }: {
   children: ReactNode;
-  initialSession: Session;
 }) {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setAvatarUrl(getAvatarSrc(initialSession.user.id));
-  }, [initialSession.user.id]);
+    (async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) setAvatarUrl(undefined);
+      else setAvatarUrl(getAvatarSrc(session.user.id));
+    })();
+  }, []);
 
   const handleAvatarUrlUpdate = useCallback((userId: string | undefined) => {
     setAvatarUrl(getAvatarSrc(userId));

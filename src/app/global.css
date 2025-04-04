@@ -7,7 +7,7 @@
     @apply border-border;
   }
   body {
-    @apply font-normal font-sans text-foreground bg-background;
+    @apply font-normal font-sans text-foreground bg-background !min-w-full;
   }
   #root {
     @apply flex flex-col;
