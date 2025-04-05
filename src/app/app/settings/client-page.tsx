@@ -22,7 +22,7 @@ export function SettingsPageDialog() {
       ...taskApi.getTodayTasksQueryOptions(),
       staleTime: 5 * 1000,
     });
-  }, [router]);
+  }, [router, queryClient]);
 
   const handleOpenChange = (open: boolean) => {
     if (open) return;

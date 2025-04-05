@@ -47,7 +47,7 @@ export function ProjectUpdateDialog(project: Project) {
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger
           className={cn(
             "[&>svg]:size-4 [&>svg]:shrink-0 p-1 hover:text-sidebar-foreground/80",

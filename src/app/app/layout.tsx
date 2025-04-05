@@ -25,8 +25,8 @@ export default async function AppLayout({
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
         {children}
+        {modal}
       </SidebarProvider>
-      {modal}
     </UserAvatarContextProvider>
   );
 }
