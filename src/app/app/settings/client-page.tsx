@@ -1,19 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { userApi } from "@/api/user-api";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogDescription,
+  DialogHeader,
   DialogTitle,
 } from "@/components/dialog";
 import { taskApi } from "@/modules/task/task-api";
+import { Button } from "@/components/button";
+import { X } from "lucide-react";
+import { Separator } from "@/components/separator";
+import { AvatarManager } from "@/components/avatar-manager";
 
 export function SettingsPageDialog() {
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
   const queryClient = useQueryClient();
   const router = useRouter();
   useEffect(() => {
@@ -29,12 +32,37 @@ export function SettingsPageDialog() {
     router.push("/app/today");
   };
   return (
-    <Dialog defaultOpen onOpenChange={handleOpenChange}>
-      <DialogTitle className="sr-only">this is settings modal</DialogTitle>
-      <DialogDescription className="sr-only">
-        this is settings modal
-      </DialogDescription>
-      <DialogContent animated={false}>{user?.name}</DialogContent>
+    <Dialog open onOpenChange={handleOpenChange}>
+      <DialogContent
+        className="gap-0 items-center p-0 md:max-w-3xl w-full"
+        customClose
+        animated={false}
+      >
+        <DialogHeader className="flex items-center justify-between flex-row p-3">
+          <DialogTitle>Account settings</DialogTitle>
+          <DialogClose asChild>
+            <Button variant="ghost" size="xs">
+              <X />
+            </Button>
+          </DialogClose>
+        </DialogHeader>
+        <Separator />
+        <ul className="flex flex-col gap-4 p-3">
+          <li>
+            <h3 className="font-semibold mb-2">Photo</h3>
+            <AvatarManager />
+          </li>
+          <li>
+            <h3 className="font-semibold mb-2">Name</h3>
+          </li>
+          <li>
+            <h3 className="font-semibold mb-2">Email</h3>
+          </li>
+          <li>
+            <h3 className="font-semibold mb-2">Password</h3>
+          </li>
+        </ul>
+      </DialogContent>
     </Dialog>
   );
 }

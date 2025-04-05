@@ -30,7 +30,7 @@ export function SidebarUserMenu() {
         <div className="flex">
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="sm" onClick={closeSidebar}>
-              <Link scroll={false} href="/app/settings">
+              <Link prefetch scroll={false} href="/app/settings">
                 <Settings />
               </Link>
             </SidebarMenuButton>
