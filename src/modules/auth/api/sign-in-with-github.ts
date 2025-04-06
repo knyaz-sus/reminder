@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -15,12 +16,12 @@ export const signInWithGithub = async () => {
     },
   });
 
-  console.log("data.url", data.url);
-
   if (error) {
     console.log(error);
     throw error;
-  } else {
-    redirect(data.url);
   }
+
+  revalidatePath("/", "layout");
+
+  redirect(data.url);
 };

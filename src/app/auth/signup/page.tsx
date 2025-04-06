@@ -10,6 +10,7 @@ import { signUpWithPassword } from "@/modules/auth/api/sign-up-with-password";
 import { ErrorMessage } from "@/components/error-message";
 import { Spinner } from "@/components/spinner";
 import { Input } from "@/components/input";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignUpForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -17,10 +18,22 @@ export default function SignUpForm() {
     resolver: zodResolver(singUpSchema),
     defaultValues: { name: "", email: "", password: "" },
   });
+  const { toast } = useToast();
   const handleSignUp: SubmitHandler<SingUpSchema> = async (formData) => {
-    await signUpWithPassword(formData.name, formData.email, formData.password);
-    setSubmitError("Error creating account");
+    const error = await signUpWithPassword(
+      formData.name,
+      formData.email,
+      formData.password
+    );
     reset();
+    if (error) {
+      setSubmitError(error.message);
+    } else {
+      toast({
+        title: "Verification email successfully sent",
+        variant: "default",
+      });
+    }
   };
   return (
     <div className="rounded-md border-border border w-full max-w-sm p-6">

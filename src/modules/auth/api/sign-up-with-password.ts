@@ -2,7 +2,6 @@
 
 import { createServerSupabase } from "@/lib/supabase/create-server-supabase";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export const signUpWithPassword = async (
   name: string,
@@ -14,7 +13,9 @@ export const signUpWithPassword = async (
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { name } },
+    options: {
+      data: { name },
+    },
   });
 
   if (error) {
@@ -22,5 +23,4 @@ export const signUpWithPassword = async (
   }
 
   revalidatePath("/", "layout");
-  redirect("/app/today");
 };

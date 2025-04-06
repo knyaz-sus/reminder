@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useUpdateUser } from "@/api/hooks/use-update-username";
 import { getClientSession } from "@/lib/supabase/get-session";
+import { LogOutButton } from "@/components/logout-button";
 
 export default function SettingsModal() {
   const { data: user } = useQuery(userApi.getUserQueryOptions());
@@ -31,7 +32,7 @@ export default function SettingsModal() {
   };
   const handleNameUpdate = async (open: boolean) => {
     setOpen(open);
-    if (!name) return;
+    if (!name || open) return;
     const session = await getClientSession();
     mutate({ id: session.user.id, name });
   };
@@ -44,11 +45,14 @@ export default function SettingsModal() {
       >
         <DialogHeader className="flex items-center justify-between flex-row p-4">
           <DialogTitle>Account settings</DialogTitle>
-          <DialogClose asChild>
-            <Button variant="ghost" size="xs">
-              <X />
-            </Button>
-          </DialogClose>
+          <div className="flex gap-2 justify-between items-center">
+            <LogOutButton />
+            <DialogClose asChild>
+              <Button variant="ghost" size="xs">
+                <X />
+              </Button>
+            </DialogClose>
+          </div>
         </DialogHeader>
         <Separator />
         <ul className="flex flex-col gap-4 p-4">

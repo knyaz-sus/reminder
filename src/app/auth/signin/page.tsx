@@ -89,10 +89,15 @@ export default function SignInForm() {
         </div>
         <Button type="submit">Sign in with password</Button>
       </form>
-      <div className="text-sm text-center">
-        <span>New to Reminder? </span>
-        <Link className="underline" href="/auth/signup">
-          Sign up
+      <div className="flex flex-col gap-1 items-center text-sm text-center">
+        <div>
+          <span>Don’t have an account? </span>
+          <Link className="underline" href="/auth/signup">
+            Sign up
+          </Link>
+        </div>
+        <Link className="underline" href="/auth/reset">
+          Forgot your password?
         </Link>
       </div>
       {submitError && !formState.isDirty && (
