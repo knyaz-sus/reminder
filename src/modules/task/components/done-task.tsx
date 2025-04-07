@@ -8,17 +8,21 @@ import { useIsServer } from "@/hooks/use-is-server";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { UserAvatar } from "@/components/user-avatar";
+import { useQuery } from "@tanstack/react-query";
+import { projectApi } from "@/modules/project/project-api";
+import { Hash, Inbox } from "lucide-react";
 
 export function DoneTask(props: Task) {
+  const { data: projects } = useQuery(projectApi.getAllProjectsQueryOptions());
   const [open, setOpen] = useState(false);
   const isServer = useIsServer();
-
+  const project = projects?.find((project) => project.id === props.projectId);
   return (
     <div className="flex text-sm flex-col items-start gap-2 mb-2 bg-background w-full">
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full">
         <UserAvatar size={40} />
-        <div className="flex items-start group flex-col gap-1">
-          <div className="flex">
+        <div className="flex items-start group flex-col gap-1 flex-auto">
+          <div className="flex w-full">
             <span>
               <strong>You</strong> completed task:{" "}
               <button onClick={() => setOpen(true)}>
@@ -28,14 +32,20 @@ export function DoneTask(props: Task) {
               </button>
             </span>
           </div>
-          {props.doneAt && (
-            <span className="text-xs">
-              {!isServer &&
-                formatTaskDate(props.doneAt) +
-                  " " +
-                  new Date(props.doneAt).toTimeString().slice(0, 5)}
-            </span>
-          )}
+          <div className="flex justify-between w-full">
+            {props.doneAt && (
+              <span className="text-xs">
+                {!isServer &&
+                  formatTaskDate(props.doneAt) +
+                    " " +
+                    new Date(props.doneAt).toTimeString().slice(0, 5)}
+              </span>
+            )}
+            <div className="flex gap-1 text-xs flex-auto justify-end text-muted-foreground">
+              <span>{project ? project.name : "Inbox"}</span>
+              {project ? <Hash size={14} /> : <Inbox size={14} />}
+            </div>
+          </div>
         </div>
       </div>
       <Separator />

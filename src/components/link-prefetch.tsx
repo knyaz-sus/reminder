@@ -18,7 +18,12 @@ export function LinkPrefetch(
   };
 
   return (
-    <Link prefetch={shouldPrefetch} onPointerEnter={handleHover} {...props}>
+    <Link
+      onClick={props.onClick}
+      prefetch={shouldPrefetch}
+      onPointerEnter={handleHover}
+      {...props}
+    >
       {props.children}
     </Link>
   );

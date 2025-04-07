@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useUpdateUser } from "@/api/hooks/use-update-username";
 import { getClientSession } from "@/lib/supabase/get-session";
 import { LogOutButton } from "@/components/logout-button";
+import { SettingsDeleteAccount } from "@/components/settings-delete-account";
 
 export default function SettingsModal() {
   const { data: user } = useQuery(userApi.getUserQueryOptions());
@@ -92,15 +93,7 @@ export default function SettingsModal() {
           </li>
           <li>
             <h3 className="font-semibold mb-2">Delete account</h3>
-            <div className="flex flex-col gap-2 items-start">
-              <span className="text-xs">
-                All your data, including tasks, projects, and more, will be
-                permanently deleted without the possibility of recovery.
-              </span>
-              <Button size="sm" variant="destructive">
-                Delete account
-              </Button>
-            </div>
+            <SettingsDeleteAccount />
           </li>
         </ul>
       </DialogContent>

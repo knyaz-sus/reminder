@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Separator } from "@/components/separator";
-import { Calendar, GripVertical } from "lucide-react";
+import { Calendar, GripVertical, Hash, Inbox } from "lucide-react";
 import { TaskCheck } from "./task-check";
 import { useUpdateTask } from "@/modules/task/hooks/api/use-update-task";
 import { useSortable } from "@dnd-kit/sortable";
@@ -14,9 +14,12 @@ import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/lib/cn";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { StaticEditor } from "@/components/editor/static-editor";
+import { useQuery } from "@tanstack/react-query";
+import { projectApi } from "@/modules/project/project-api";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
+  const { data: projects } = useQuery(projectApi.getAllProjectsQueryOptions());
   const { handleDone } = useUpdateTask(props.param);
   const isServer = useIsServer();
   const isMobile = useIsMobile();
@@ -37,6 +40,7 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
     transition,
     zIndex: isDragging ? 1000 : 0,
   };
+  const project = projects?.find((project) => project.id === props.projectId);
   return (
     <div
       {...(!isMobile && { ...attributes, ...listeners })}
@@ -74,16 +78,24 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
                 className="text-xs text-foreground/80"
               />
             )}
-            {!!props.date && props.param !== "today" && (
-              <button className="flex items-start gap-1 text-xs">
-                {props.date && !isServer && (
-                  <>
-                    <Calendar size={14} />
-                    <span>{formatTaskDate(props.date)}</span>
-                  </>
-                )}
-              </button>
-            )}
+            <div className="flex">
+              {!!props.date && props.param !== "today" && (
+                <div className="flex gap-1 text-xs">
+                  {props.date && !isServer && (
+                    <>
+                      <Calendar size={14} />
+                      <span>{formatTaskDate(props.date)}</span>
+                    </>
+                  )}
+                </div>
+              )}
+              {props.param === "today" && (
+                <div className="flex gap-1 text-xs flex-auto justify-end text-muted-foreground">
+                  <span>{project ? project.name : "Inbox"}</span>
+                  {project ? <Hash size={14} /> : <Inbox size={14} />}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
