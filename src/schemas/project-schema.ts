@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const projectSchema = z.object({
-  adminId: z.string().uuid(),
   id: z.string().uuid(),
   name: z.string().min(1),
   updatedAt: z.string(),
@@ -17,11 +16,9 @@ export const createProjectRequestSchema = z.object({
 
 export const deleteProjectRequestSchema = z.object({
   id: z.string().uuid(),
-  adminId: z.string().uuid(),
 });
 
 export const updateProjectRequestSchema = z.object({
-  adminId: z.string().uuid().optional(),
   id: z.string().uuid(),
   name: z.string().min(1).optional(),
   updatedAt: z.string().optional(),

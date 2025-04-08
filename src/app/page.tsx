@@ -7,7 +7,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/variants/button-variants";
 import { cn } from "@/lib/cn";
 import { CalendarCheck } from "lucide-react";
-import { LinkPrefetch } from "@/components/link-prefetch";
 
 export default function HomePage() {
   return (
@@ -27,7 +26,9 @@ export default function HomePage() {
           </div>
           <div className="mt-4 flex justify-center gap-2">
             <Button asChild>
-              <LinkPrefetch href="/auth/signin">Get Started Now</LinkPrefetch>
+              <Link prefetch href="/auth/signin">
+                Get Started Now
+              </Link>
             </Button>
           </div>
           <div className="mt-20 flex flex-col items-center gap-4">

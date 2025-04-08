@@ -16,15 +16,18 @@ import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { deleteUser } from "@/modules/auth/api/delete-user";
 import { useToast } from "@/hooks/use-toast";
+import { Spinner } from "@/components/spinner";
 
 export function SettingsDeleteAccount() {
   const { data: user } = useQuery(userApi.getUserQueryOptions());
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const { toast } = useToast();
+  const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
     if (!user?.email || deleteConfirmation != user.email) {
       return;
     }
+    setIsDeleting(true);
     const { error } = await deleteUser();
     if (error) {
       toast({
@@ -32,6 +35,7 @@ export function SettingsDeleteAccount() {
         variant: "destructive",
       });
     }
+    setIsDeleting(false);
   };
   return (
     <div className="flex flex-col gap-2 items-start">
@@ -42,7 +46,7 @@ export function SettingsDeleteAccount() {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button size="sm" variant="destructive">
-            Delete account
+            {isDeleting ? <Spinner /> : "Delete account"}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="sm:max-w-md">

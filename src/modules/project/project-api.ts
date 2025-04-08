@@ -49,17 +49,12 @@ export const projectApi = {
     return queryOptions({
       queryFn: async () => {
         try {
-          const {
-            data: { session },
-          } = await supabaseClient.auth.getSession();
-          if (!session) {
-            throw Error("Auth error while getting projects");
+          const { data: projects, error } = await supabaseClient.rpc(
+            "get_all_user_projects"
+          );
+          if (error) {
+            throw Error("Error while getting projects");
           }
-          const { data: projects } = await supabaseClient
-            .from("projects")
-            .select("*")
-            .eq("adminId", session.user.id)
-            .throwOnError();
 
           return projectsSchema.parse(projects);
         } catch (error) {
@@ -73,20 +68,21 @@ export const projectApi = {
 
   async createProject(projectRequest: CreateProjectRequest) {
     createProjectRequestSchema.parse(projectRequest);
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session) {
-      throw Error("Auth error while creating projects");
-    }
-    const { data } = await supabase
-      .from("projects")
-      .insert({ ...projectRequest, adminId: session?.user.id })
-      .select("*")
-      .single()
-      .throwOnError();
 
-    return projectSchema.parse(data);
+    const { error: projectsError } = await supabase
+      .from("projects")
+      .insert(projectRequest);
+
+    const { error: membersError } = await supabase
+      .from("project_members")
+      .insert({
+        projectId: projectRequest.id,
+        role: "admin",
+      });
+
+    if (projectsError || membersError) {
+      throw Error("Error creating project");
+    }
   },
 
   async deleteProject(deleteRequest: DeleteProjectRequest) {

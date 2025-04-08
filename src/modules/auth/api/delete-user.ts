@@ -17,6 +17,8 @@ export async function deleteUser() {
     return { error: "An error occurred while deleting account." };
   }
 
+  await supabase.auth.signOut();
+  
   revalidatePath("/", "layout");
 
   redirect("/auth/signin");

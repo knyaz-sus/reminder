@@ -38,7 +38,7 @@ export function ProjectUpdateDialog(project: Project) {
   const { mutate: handleUpdate } = useUpdateProject();
 
   const deleteProject = () => {
-    handleDelete({ id: project.id, adminId: project.adminId });
+    handleDelete({ id: project.id });
   };
   const updateProject = () => {
     z.string().nonempty().safeParse(updateName);

@@ -33,7 +33,6 @@ export const useCreateProject = () => {
           return [
             {
               ...newProject,
-              adminId: session?.user.id,
               updatedAt: new Date().toISOString(),
               createdAt: new Date().toISOString(),
             },
@@ -54,9 +53,9 @@ export const useCreateProject = () => {
         variant: "destructive",
       });
     },
-    onSettled(data) {
+    onSettled(_, error, variables) {
       queryClient.invalidateQueries({ queryKey: projectApi.baseKey });
-      if (data) router.push(`/app/projects/${data.id}`);
+      if (!error) router.push(`/app/projects/${variables.id}`);
     },
   });
 
