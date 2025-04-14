@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/badge";
 import { Button } from "@/components/button";
 import { HomeBackground } from "@/components/home-background/home-background";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -20,7 +19,6 @@ export default function HomePage() {
         <HomeBackground />
         <div className="flex flex-col items-center gap-6 text-center max-w-5xl px-4">
           <CalendarCheck size={60} />
-          <Badge>Task manager</Badge>
           <div>
             <h1 className="mb-6 text-pretty text-2xl font-bold lg:text-5xl">
               Build your shedule with minimalistic task manager
