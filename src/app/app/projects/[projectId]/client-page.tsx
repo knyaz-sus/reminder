@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useId, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQueryProjectTasks } from "@/modules/task/hooks/api/use-query-project-tasks";
 import { useTaskSensors } from "@/modules/task/hooks/use-task-sensors";
 import { useUpdateTaskOrder } from "@/modules/task/hooks/api/use-update-task-order";
@@ -25,19 +25,15 @@ export function ProjectPage() {
   const [filter, setFilter] = useState<PageFilter>("User preference");
   const { projectId } = useParams<{ projectId: string }>();
   const sensors = useTaskSensors();
+  const id = useId();
 
-  const { data: project } = useQuery({
-    ...projectApi.getProjectQueryOptions(projectId),
-  });
-
+  const { data: project } = useSuspenseQuery(
+    projectApi.getProjectQueryOptions(projectId)
+  );
   const { tasks, setTasks } = useQueryProjectTasks(projectId, filter);
-
   const { mutate: handleUpdateOrder } = useUpdateTaskOrder(projectId);
-
   const { mutate: handleCreate } = useCreateTask(projectId);
 
-  if (!tasks) return null;
-  
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (!over) return;
@@ -59,6 +55,7 @@ export function ProjectPage() {
 
   return (
     <DndContext
+      id={id}
       sensors={sensors}
       collisionDetection={closestCorners}
       onDragEnd={handleDragEnd}
@@ -67,9 +64,7 @@ export function ProjectPage() {
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
         <PageHeader filter={filter} setFilter={setFilter} />
         <PageContainer>
-          <h1 className="mb-4 overflow-hidden text-ellipsis">
-            {project?.name}
-          </h1>
+          <h1 className="mb-4 overflow-hidden text-ellipsis">{project.name}</h1>
           <div className="flex flex-col">
             {tasks.map((task) => (
               <Task

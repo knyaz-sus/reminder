@@ -12,7 +12,7 @@ import {
 } from "@/components/dialog";
 import { Input } from "@/components/input";
 import { Separator } from "@/components/separator";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,11 +22,11 @@ import { LogOutButton } from "@/components/logout-button";
 import { SettingsDeleteAccount } from "@/components/settings-delete-account";
 
 export default function SettingsModal() {
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());
   const [open, setOpen] = useState(true);
   const router = useRouter();
   const { mutate } = useUpdateUser();
-  const [name, setName] = useState(user?.name);
+  const [name, setName] = useState(user.name);
 
   const handleNavigation = () => {
     if (!open) router.back();
@@ -77,7 +77,7 @@ export default function SettingsModal() {
           <li>
             <h3 className="font-semibold mb-2">Email</h3>
             <div className="flex flex-col gap-2 items-start">
-              <span className="text-sm">{user?.email}</span>
+              <span className="text-sm">{user.email}</span>
               <Button size="sm" variant="secondary">
                 Change email
               </Button>

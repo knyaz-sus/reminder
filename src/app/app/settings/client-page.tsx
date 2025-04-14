@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
   Dialog,
@@ -23,8 +23,8 @@ import { useUpdateUser } from "@/api/hooks/use-update-username";
 
 export function SettingsPageDialog() {
   const queryClient = useQueryClient();
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
-  const [name, setName] = useState(user?.name);
+  const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());
+  const [name, setName] = useState(user.name);
   const router = useRouter();
   const { mutate } = useUpdateUser();
   useEffect(() => {
@@ -74,14 +74,14 @@ export function SettingsPageDialog() {
                 onChange={(e) => setName(e.target.value)}
               />
               <span className="text-xs self-end text-muted-foreground">
-                {name?.length}/255
+                {name.length}/255
               </span>
             </div>
           </li>
           <li>
             <h3 className="font-semibold mb-2">Email</h3>
             <div className="flex flex-col gap-2 items-start">
-              <span className="text-sm">{user?.email}</span>
+              <span className="text-sm">{user.email}</span>
               <Button size="sm" variant="secondary">
                 Change email
               </Button>

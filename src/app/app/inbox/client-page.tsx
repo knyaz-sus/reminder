@@ -22,7 +22,7 @@ export default function Inbox() {
       <PageContainer>
         <h1 className="mb-4">Inbox</h1>
         <div className="flex flex-col">
-          {tasks?.map((task) => (
+          {tasks.map((task) => (
             <Task param="inbox" isSortable={false} key={task.id} {...task} />
           ))}
           <CreateTask projectId={null} createTask={handleCreate} order={null} />

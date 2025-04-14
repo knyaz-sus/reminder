@@ -24,7 +24,6 @@ export const projectApi = {
     return queryOptions({
       queryFn: async () => {
         try {
-          if (!projectId) return null;
           const validatedId = validateUUID(projectId);
           const { data } = await supabaseClient
             .from("projects")

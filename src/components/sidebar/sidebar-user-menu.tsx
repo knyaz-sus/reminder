@@ -9,13 +9,13 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "./sidebar";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import { UserAvatar } from "@/components/user-avatar";
 import { useSidebar } from "@/hooks/use-sidebar";
 
 export function SidebarUserMenu() {
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());
   const { setOpenMobile } = useSidebar();
   const closeSidebar = () => setOpenMobile(false);
   return (
@@ -24,7 +24,7 @@ export function SidebarUserMenu() {
         <SidebarMenuItem className="flex gap-3 items-center text-sm">
           <UserAvatar size={28} />
           <span className="max-w-32 font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-            {user?.name}
+            {user.name}
           </span>
         </SidebarMenuItem>
         <div className="flex">

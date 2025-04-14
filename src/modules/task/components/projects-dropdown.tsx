@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dropdown-menu";
 import { projectApi } from "@/modules/project/project-api";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useUpdateTask } from "../hooks/api/use-update-task";
 
 interface ProjectsDropdownProps {
@@ -16,10 +16,10 @@ interface ProjectsDropdownProps {
 }
 
 export function ProjectsDropdown({ taskId, projectId }: ProjectsDropdownProps) {
-  const { data: projects } = useQuery(projectApi.getAllProjectsQueryOptions());
-  const { data: project } = useQuery(
-    projectApi.getProjectQueryOptions(projectId)
+  const { data: projects } = useSuspenseQuery(
+    projectApi.getAllProjectsQueryOptions()
   );
+  const project = projects.find((project) => project.id === projectId);
   const { handleUpdate } = useUpdateTask(taskId);
   return (
     <DropdownMenu modal={false}>

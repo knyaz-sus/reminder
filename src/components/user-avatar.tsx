@@ -1,10 +1,10 @@
 import { useAvatar } from "@/hooks/use-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 
 export function UserAvatar({ size }: { size: number }) {
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());
   const { avatarUrl } = useAvatar();
   return (
     <Avatar style={{ width: size, height: size }}>
@@ -19,7 +19,7 @@ export function UserAvatar({ size }: { size: number }) {
         />
       )}
       <AvatarFallback className="bg-secondary text-secondary-foreground rounded-full">
-        {user?.name?.substring(0, 2).toUpperCase()}
+        {user.name.substring(0, 2).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );

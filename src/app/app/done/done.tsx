@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { PageContainer } from "@/components/page-container";
 import { PageHeader } from "@/components/page-header";
 import { PageFilter } from "@/constants/ui";
@@ -10,7 +10,7 @@ import { taskApi } from "@/modules/task/task-api";
 
 export function Done() {
   const [filter, setFilter] = useState<PageFilter>("Date ascending");
-  const { data: doneTasks } = useQuery({
+  const { data: doneTasks } = useSuspenseQuery({
     ...taskApi.getDoneTasksQueryOptions(),
     select(data) {
       return data.sort(
@@ -18,7 +18,6 @@ export function Done() {
       );
     },
   });
-  if (!doneTasks) return null;
 
   return (
     <>
@@ -26,7 +25,7 @@ export function Done() {
       <PageContainer>
         <h1 className="mb-4">Done</h1>
         <div className="flex items-start flex-col">
-          {doneTasks?.map((task) => (
+          {doneTasks.map((task) => (
             <DoneTask key={task.id} {...task} />
           ))}
         </div>

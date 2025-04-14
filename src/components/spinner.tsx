@@ -22,4 +22,3 @@ export function Spinner({ className, size = 24 }: SpinnerProps) {
     </svg>
   );
 }
-// CHANGE ERROR PAGE with long words

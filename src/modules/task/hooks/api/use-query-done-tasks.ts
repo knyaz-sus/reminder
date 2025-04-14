@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { taskApi } from "../../task-api";
+import {  useSuspenseQuery } from "@tanstack/react-query";
+import { taskApi } from "@/modules/task/task-api";
 
 export const useQueryDoneTasks = () => {
   const {
     data: tasks,
     isPending,
     error,
-  } = useQuery({
+  } = useSuspenseQuery({
     ...taskApi.getDoneTasksQueryOptions(),
     select(data) {
       return data.sort(

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { userApi } from "@/api/user-api";
 import {
   AlertDialog,
@@ -19,12 +19,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Spinner } from "@/components/spinner";
 
 export function SettingsDeleteAccount() {
-  const { data: user } = useQuery(userApi.getUserQueryOptions());
+  const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
-    if (!user?.email || deleteConfirmation != user.email) {
+    if (deleteConfirmation != user.email) {
       return;
     }
     setIsDeleting(true);
@@ -54,8 +54,8 @@ export function SettingsDeleteAccount() {
             <AlertDialogTitle>Confirm account delete</AlertDialogTitle>
             <AlertDialogDescription>
               To confirm, type{" "}
-              <span className="font-semibold">&quot;{user?.email}&quot;</span>{" "}
-              in the box below
+              <span className="font-semibold">&quot;{user.email}&quot;</span> in
+              the box below
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex items-center">

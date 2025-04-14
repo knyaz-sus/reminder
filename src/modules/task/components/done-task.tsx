@@ -8,15 +8,15 @@ import { useIsServer } from "@/hooks/use-is-server";
 import { formatTaskDate } from "@/modules/task/utils/format-task-date";
 import { UpdateTaskModal } from "./update-task-dialog";
 import { UserAvatar } from "@/components/user-avatar";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { projectApi } from "@/modules/project/project-api";
 import { Hash, Inbox } from "lucide-react";
 
 export function DoneTask(props: Task) {
-  const { data: projects } = useQuery(projectApi.getAllProjectsQueryOptions());
+  const { data: projects } = useSuspenseQuery(projectApi.getAllProjectsQueryOptions());
   const [open, setOpen] = useState(false);
   const isServer = useIsServer();
-  const project = projects?.find((project) => project.id === props.projectId);
+  const project = projects.find((project) => project.id === props.projectId);
   return (
     <div className="flex text-sm flex-col items-start gap-2 mb-2 bg-background w-full">
       <div className="flex gap-2 w-full">
@@ -35,10 +35,7 @@ export function DoneTask(props: Task) {
           <div className="flex justify-between w-full">
             {props.doneAt && (
               <span className="text-xs">
-                {!isServer &&
-                  formatTaskDate(props.doneAt) +
-                    " " +
-                    new Date(props.doneAt).toTimeString().slice(0, 5)}
+                {!isServer && formatTaskDate(props.doneAt)}
               </span>
             )}
             <div className="flex gap-1 text-xs flex-auto justify-end text-muted-foreground">
