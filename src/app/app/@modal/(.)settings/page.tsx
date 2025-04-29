@@ -1,7 +1,7 @@
 "use client";
 
 import { AvatarManager } from "@/components/avatar-manager";
-import { userApi } from "@/api/user-api";
+import { userApi } from "@/api/user-api/user-api";
 import { Button } from "@/components/button";
 import {
   Dialog,
@@ -16,7 +16,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useUpdateUser } from "@/api/hooks/use-update-username";
+import { useUpdateUser } from "@/api/user-api/use-update-username";
 import { getClientSession } from "@/lib/supabase/get-session";
 import { LogOutButton } from "@/components/logout-button";
 import { SettingsDeleteAccount } from "@/components/settings-delete-account";

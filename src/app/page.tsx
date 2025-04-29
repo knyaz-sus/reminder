@@ -6,8 +6,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/variants/button-variants";
 import { cn } from "@/lib/cn";
 import { CalendarCheck } from "lucide-react";
-import { LinkLoader } from "@/components/link-loader";
-import { Spinner } from "@/components/spinner";
 
 export default function HomePage() {
   return (
@@ -28,9 +26,6 @@ export default function HomePage() {
             <Button asChild>
               <Link prefetch href="/auth/signin">
                 Get Started Now
-                <LinkLoader>
-                  <Spinner />
-                </LinkLoader>
               </Link>
             </Button>
           </div>

@@ -13,10 +13,14 @@ import { projectApi } from "@/modules/project/project-api";
 import { Hash, Inbox } from "lucide-react";
 
 export function DoneTask(props: Task) {
-  const { data: projects } = useSuspenseQuery(projectApi.getAllProjectsQueryOptions());
+  const { data: project } = useSuspenseQuery({
+    ...projectApi.getAllProjectsQueryOptions(),
+    select(data) {
+      return data.find((project) => project.id === props.projectId);
+    },
+  });
   const [open, setOpen] = useState(false);
   const isServer = useIsServer();
-  const project = projects.find((project) => project.id === props.projectId);
   return (
     <div className="flex text-sm flex-col items-start gap-2 mb-2 bg-background w-full">
       <div className="flex gap-2 w-full">

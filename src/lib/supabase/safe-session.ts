@@ -85,7 +85,7 @@ export class SafeSession {
     try {
       const { payload } = await jwtVerify<SupabaseSafeUser>(
         accessToken,
-        new TextEncoder().encode(process.env.JWT_SECRET)
+        new TextEncoder().encode(process.env.JWT_SECRET!)
       );
       return {
         data: {

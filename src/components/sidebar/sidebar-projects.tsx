@@ -12,6 +12,7 @@ import { SidebarProject } from "./sidebar-project";
 import { SidebarGroup, SidebarGroupContent } from "./sidebar";
 import { projectApi } from "@/modules/project/project-api";
 
+
 export function SidebarProjects() {
   const { data } = useSuspenseQuery({
     ...projectApi.getAllProjectsQueryOptions(),

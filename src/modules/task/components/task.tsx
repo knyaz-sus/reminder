@@ -19,9 +19,13 @@ import { projectApi } from "@/modules/project/project-api";
 
 export function Task(props: TaskType & { isSortable: boolean; param: string }) {
   const [open, setOpen] = useState(false);
-  const { data: projects } = useSuspenseQuery(
-    projectApi.getAllProjectsQueryOptions()
-  );
+
+  const { data: project } = useSuspenseQuery({
+    ...projectApi.getAllProjectsQueryOptions(),
+    select(data) {
+      return data.find((project) => project.id === props.projectId);
+    },
+  });
   const { handleDone } = useUpdateTask(props.param);
   const isServer = useIsServer();
   const isMobile = useIsMobile();
@@ -42,7 +46,6 @@ export function Task(props: TaskType & { isSortable: boolean; param: string }) {
     transition,
     zIndex: isDragging ? 1000 : 0,
   };
-  const project = projects.find((project) => project.id === props.projectId);
   return (
     <div
       {...(!isMobile && { ...attributes, ...listeners })}

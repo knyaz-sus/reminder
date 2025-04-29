@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { userApi } from "@/api/user-api";
+import { userApi } from "@/api/user-api/user-api";
 import {
   AlertDialog,
   AlertDialogAction,

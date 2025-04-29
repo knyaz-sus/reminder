@@ -1,7 +1,7 @@
 import { useAvatar } from "@/hooks/use-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { userApi } from "@/api/user-api";
+import { userApi } from "@/api/user-api/user-api";
 
 export function UserAvatar({ size }: { size: number }) {
   const { data: user } = useSuspenseQuery(userApi.getUserQueryOptions());

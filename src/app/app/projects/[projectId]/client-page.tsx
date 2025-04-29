@@ -20,19 +20,24 @@ import { projectApi } from "@/modules/project/project-api";
 import { PageHeader } from "@/components/page-header";
 import { PageContainer } from "@/components/page-container";
 import { PageFilter } from "@/constants/ui";
+import { Project as ProjectType } from "@/schemas/project-schema";
 
-export function ProjectPage() {
-  const [filter, setFilter] = useState<PageFilter>("User preference");
+export function Project() {
   const { projectId } = useParams<{ projectId: string }>();
-  const sensors = useTaskSensors();
-  const id = useId();
+  const { data: project } = useSuspenseQuery({
+    ...projectApi.getAllProjectsQueryOptions(),
+    select(data) {
+      return data.find((project) => project.id === projectId) as ProjectType;
+    },
+  });
 
-  const { data: project } = useSuspenseQuery(
-    projectApi.getProjectQueryOptions(projectId)
-  );
+  const [filter, setFilter] = useState<PageFilter>("User preference");
   const { tasks, setTasks } = useQueryProjectTasks(projectId, filter);
   const { mutate: handleUpdateOrder } = useUpdateTaskOrder(projectId);
   const { mutate: handleCreate } = useCreateTask(projectId);
+
+  const sensors = useTaskSensors();
+  const id = useId();
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -52,7 +57,6 @@ export function ProjectPage() {
       handleUpdateOrder(updatedTasks);
     }
   };
-
   return (
     <DndContext
       id={id}

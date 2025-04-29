@@ -10,7 +10,7 @@ import {
   SidebarTrigger,
 } from "./sidebar";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { userApi } from "@/api/user-api";
+import { userApi } from "@/api/user-api/user-api";
 import { UserAvatar } from "@/components/user-avatar";
 import { useSidebar } from "@/hooks/use-sidebar";
 
